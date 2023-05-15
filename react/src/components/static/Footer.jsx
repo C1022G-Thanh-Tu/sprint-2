@@ -3,7 +3,7 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="wrapper_footer style-three mt-5">
+    <footer className="wrapper_footer style-three">
       <div className="wrapper_footer_main">
         <div className="container pt-5 pb-2">
           <div className="row footer_main">

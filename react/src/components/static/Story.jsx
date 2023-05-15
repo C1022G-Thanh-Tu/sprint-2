@@ -198,22 +198,22 @@ function Story() {
         </div>
       </div>
 
-      <div className="mt-5">
-      <div
+      <div className="mt-5 mb-5">
+        <div
           className="mt-3 container pt-4 pb-4 d-flex flex-row align-items-center"
           style={{ maxWidth: "1200px", backgroundColor: "#ddd" }}
         >
-        <i class="bi bi-quote" style={{fontSize: '70px'}}></i>
-        <p style={{ textAlign: "justify" }}>
-          Trải qua hành trình gắn bó với cây chanh và xây dựng chuỗi giá trị cho
-          nông sản Việt, <b>Công ty Chanh Việt</b> đã đạt nhiều giấy khen trong và
-          ngoài nước…Những thành quả này đã tiếp thêm động lực cho toàn thể <b>Công ty Chanh Việt</b>, 
-          giúp vững tin hơn và bước chân đồng hành cùng ông Hiển
-          trên hành trình nâng cao giá trị nông sản Việt, mang đến các sản phẩm
-          sạch và tử tế từ nhãn hiệu <b>CHAVI</b> đến với người tiêu dùng trong nước và
-          quốc tế.
-        </p>
-      </div>
+          <i class="bi bi-quote" style={{ fontSize: "70px" }}></i>
+          <p style={{ textAlign: "justify" }}>
+            Trải qua hành trình gắn bó với cây chanh và xây dựng chuỗi giá trị
+            cho nông sản Việt, <b>Công ty Chanh Việt</b> đã đạt nhiều giấy khen
+            trong và ngoài nước…Những thành quả này đã tiếp thêm động lực cho
+            toàn thể <b>Công ty Chanh Việt</b>, giúp vững tin hơn và bước chân
+            đồng hành cùng ông Hiển trên hành trình nâng cao giá trị nông sản
+            Việt, mang đến các sản phẩm sạch và tử tế từ nhãn hiệu <b>CHAVI</b>{" "}
+            đến với người tiêu dùng trong nước và quốc tế.
+          </p>
+        </div>
       </div>
     </>
   );

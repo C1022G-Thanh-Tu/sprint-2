@@ -104,7 +104,7 @@ function Resources() {
               </li>
             </ul>
 
-            <div className="text-center mt-5">
+            <div className="text-center mt-5 mb-5">
               <img
                 src="https://chanhviet.com/wp-content/uploads/2019/11/vuon-chanh-viet.jpg"
                 alt=""

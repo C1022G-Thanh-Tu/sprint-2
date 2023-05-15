@@ -56,36 +56,49 @@ html {
   right: 0;
 }
 
-.detail {
-  background-color: #4caf50;
-  color: #fff;
+.detail-btn {
+  border-radius: 4px;
+  background-color: #12ac4c;
   border: none;
-  padding: 10px 20px;
-  position: relative;
-  overflow: hidden;
+  color: #FFFFFF;
+  text-align: center;
   text-decoration: none;
+  padding: 10px 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 40px;
 }
 
-.detail::after {
-  content: ">>";
+.detail-btn:hover {
+  background-color: #f4511e;
+  color: #FFFFFF;
+}
+
+.detail-btn span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.detail-btn span:after {
+  content: '\00bb';
   position: absolute;
   opacity: 0;
   top: 0;
-  left: 100%;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  color: #000;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s;
+  right: -20px;
+  transition: 0.5s;
 }
 
-.detail:hover::after {
+.detail-btn:hover span {
+  padding-right: 25px;
+}
+
+.detail-btn:hover span:after {
   opacity: 1;
-  left: 0;
+  right: 0;
 }
 
 .entry-header {
@@ -101,12 +114,14 @@ html {
 .top-to-btm{
   position: relative;
 }
+
 .icon-position{
   position: fixed;
   bottom: 40px;
   right: 25px;
   z-index: 20;
 }
+
 .icon-style{
   background-color: #12ac4c;
   border: 2px solid #fff;
@@ -117,12 +132,14 @@ html {
   cursor: pointer;
   transition: all .5s ease-in-out;
 }
+
 .icon-style:hover{
   animation: none;
   background: #fff;
   color: #12ac4c;
   border: 2px solid #12ac4c;
 }
+
 @keyframes movebtn {
   0%{
     transform: translateY(0px);

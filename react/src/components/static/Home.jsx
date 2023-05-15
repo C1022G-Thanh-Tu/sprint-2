@@ -212,8 +212,8 @@ function Home() {
                 và chế biến các sản phẩm chất lượng cao đến tay người tiêu dùng.
               </p>
               <p className="text-center mt-2">
-                <Link to={'/resources'} className="detail">
-                  XEM CHI TIẾT
+                <Link to={"/resources"} className="detail-btn">
+                  <span>XEM CHI TIẾT</span>
                 </Link>
               </p>
             </div>
@@ -260,8 +260,8 @@ function Home() {
                 người tiêu dùng.
               </p>
               <p className="text-center mt-2">
-                <Link to={'/story'} className="detail">
-                  XEM CHI TIẾT
+                <Link to={"/story"} className="detail-btn">
+                  <span>XEM CHI TIẾT</span>
                 </Link>
               </p>
             </div>
@@ -294,8 +294,8 @@ function Home() {
                 người nông dân...đến khát vọng nâng tầm giá trị nông sản Việt.
               </p>
               <p className="text-center mt-2">
-                <a href="#" className="detail">
-                  XEM CHI TIẾT
+                <a href="#" className="detail-btn">
+                  <span>XEM CHI TIẾT</span>
                 </a>
               </p>
             </div>
