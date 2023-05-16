@@ -48,7 +48,7 @@ function Footer() {
                     >
                       <li className="menu-item">
                         <i
-                          class="bi bi-caret-right-fill pe-3 text-white"
+                          className="bi bi-caret-right-fill pe-3 text-white"
                           style={{ fontSize: "12px" }}
                         ></i>
                         <a
@@ -62,7 +62,7 @@ function Footer() {
                       </li>
                       <li className="menu-item">
                         <i
-                          class="bi bi-caret-right-fill pe-3 text-white"
+                          className="bi bi-caret-right-fill pe-3 text-white"
                           style={{ fontSize: "12px" }}
                         ></i>
                         <a
@@ -76,7 +76,7 @@ function Footer() {
                       </li>
                       <li className="menu-item">
                         <i
-                          class="bi bi-caret-right-fill pe-3 text-white"
+                          className="bi bi-caret-right-fill pe-3 text-white"
                           style={{ fontSize: "12px" }}
                         ></i>
                         <a
@@ -90,7 +90,7 @@ function Footer() {
                       </li>
                       <li className="menu-item">
                         <i
-                          class="bi bi-caret-right-fill pe-3 text-white"
+                          className="bi bi-caret-right-fill pe-3 text-white"
                           style={{ fontSize: "12px" }}
                         ></i>
                         <a
@@ -120,8 +120,8 @@ function Footer() {
                         loading="lazy"
                         style={{ border: 0 }}
                         src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15676.570893492362!2d106.663146!3d10.800379!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175293038ccb147%3A0xe38ae9745e9fa075!2zMjYxIEhvw6BuZyBWxINuIFRo4bulLCBQaMaw4budbmcgMiwgVMOibiBCw6xuaCwgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2sus!4v1572505054857!5m2!1svi!2sus"
-                        frameborder="0"
-                        allowfullscreen
+                        frameBorder="0"
+                        allowFullScreen
                       ></iframe>
                     </p>
                   </div>

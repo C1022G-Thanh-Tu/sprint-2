@@ -10,7 +10,7 @@ function Header() {
             <div className="col-12">
               <a href="#">
                 <span className="mr-2">
-                  <i class="bi bi-envelope text-white"></i>
+                  <i className="bi bi-envelope text-white"></i>
                 </span>
                 <span className="d-none d-md-inline-block text-white">
                   chavi@gmail.com
@@ -19,7 +19,7 @@ function Header() {
               <span className="mx-md-2 d-inline-block"></span>
               <a href="#">
                 <span className="mr-2">
-                  <i class="bi bi-telephone text-white"></i>
+                  <i className="bi bi-telephone text-white"></i>
                 </span>
                 <span className="d-none d-md-inline-block text-white">
                   (+84) 932591241
@@ -28,7 +28,7 @@ function Header() {
               <div className="float-end">
                 <a href="#">
                   <span className="mr-2">
-                    <i class="bi bi-twitter text-white"></i>
+                    <i className="bi bi-twitter text-white"></i>
                   </span>
                   <span className="d-none d-md-inline-block text-white">
                     Twitter
@@ -37,7 +37,7 @@ function Header() {
                 <span className="mx-md-2 d-inline-block"></span>
                 <a href="#">
                   <span className="mr-2">
-                    <i class="bi bi-facebook text-white"></i>
+                    <i className="bi bi-facebook text-white"></i>
                   </span>
                   <span className="d-none d-md-inline-block text-white">
                     Facebook
@@ -50,8 +50,12 @@ function Header() {
       </div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light sticky-top p-0">
         <div className="container">
-          <NavLink to='/' className="navbar-brand" href="#">
-            <img src="https://chanhviet.com/wp-content/uploads/2019/11/logo-chanh-viet-2019.jpg" alt="" width={90}/>
+          <NavLink to="/" className="navbar-brand" href="#">
+            <img
+              src="https://chanhviet.com/wp-content/uploads/2019/11/logo-chanh-viet-2019.jpg"
+              alt=""
+              width={90}
+            />
           </NavLink>
           <button
             className="navbar-toggler"
@@ -70,7 +74,11 @@ function Header() {
           >
             <ul className="navbar-nav">
               <li className="nav-item flex-1 pe-5">
-                <NavLink to='/' className="nav-link active main-color fs-5" aria-current="page">
+                <NavLink
+                  to="/"
+                  className="nav-link active main-color fs-5"
+                  aria-current="page"
+                >
                   Trang chủ
                 </NavLink>
               </li>
@@ -89,12 +97,12 @@ function Header() {
                   aria-labelledby="navbarDropdownMenuLink"
                 >
                   <li>
-                    <Link to={"/resources"} className="dropdown-item">
+                    <NavLink to={"/resources"} className="dropdown-item">
                       Nguồn nguyên liệu
-                    </Link>
+                    </NavLink>
                   </li>
                   <li>
-                    <NavLink to={'/story'} className="dropdown-item">
+                    <NavLink to={"/story"} className="dropdown-item">
                       Câu chuyện chúng tôi
                     </NavLink>
                   </li>
@@ -106,17 +114,20 @@ function Header() {
                 </ul>
               </li>
               <li className="nav-item flex-1 pe-5">
-                <a className="nav-link main-color fs-5" href="#">
+                <NavLink to="/product" className="nav-link main-color fs-5">
                   Sản phẩm
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item flex-1 pe-5">
-                <a className="nav-link main-color fs-5" href="#">
+                <NavLink to={'/contact'} className="nav-link main-color fs-5">
                   Liên hệ
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>
+          <NavLink to="/cart" className="navbar-brand">
+            <i className="bi bi-cart"></i>
+          </NavLink>
         </div>
       </nav>
     </>

@@ -64,7 +64,7 @@ function Home() {
           data-bs-target="#carouselExampleIndicators"
           data-bs-slide="prev"
         >
-          <i class="bi bi-arrow-left-square-fill fs-1"></i>
+          <i className="bi bi-arrow-left-square-fill fs-1"></i>
           <span className="visually-hidden">Previous</span>
         </button>
         <button
@@ -73,7 +73,7 @@ function Home() {
           data-bs-target="#carouselExampleIndicators"
           data-bs-slide="next"
         >
-          <i class="bi bi-arrow-right-square-fill fs-1"></i>
+          <i className="bi bi-arrow-right-square-fill fs-1"></i>
           <span className="visually-hidden">Next</span>
         </button>
       </div>

@@ -60,7 +60,7 @@ html {
   border-radius: 4px;
   background-color: #12ac4c;
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   text-decoration: none;
   padding: 10px 20px;
@@ -73,7 +73,7 @@ html {
 
 .detail-btn:hover {
   background-color: #f4511e;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .detail-btn span {
@@ -84,7 +84,7 @@ html {
 }
 
 .detail-btn span:after {
-  content: '\00bb';
+  content: "\00bb";
   position: absolute;
   opacity: 0;
   top: 0;
@@ -111,18 +111,18 @@ html {
   color: #12ac4c;
 }
 
-.top-to-btm{
+.top-to-btm {
   position: relative;
 }
 
-.icon-position{
+.icon-position {
   position: fixed;
   bottom: 40px;
   right: 25px;
   z-index: 20;
 }
 
-.icon-style{
+.icon-style {
   background-color: #12ac4c;
   border: 2px solid #fff;
   border-radius: 50%;
@@ -130,10 +130,10 @@ html {
   width: 50px;
   color: #fff;
   cursor: pointer;
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
-.icon-style:hover{
+.icon-style:hover {
   animation: none;
   background: #fff;
   color: #12ac4c;
@@ -141,19 +141,106 @@ html {
 }
 
 @keyframes movebtn {
-  0%{
+  0% {
     transform: translateY(0px);
   }
-  25%{
+  25% {
     transform: translateY(20px);
   }
-  50%{
+  50% {
     transform: translateY(0px);
   }
-  75%{
+  75% {
     transform: translateY(-20px);
   }
-  100%{
+  100% {
     transform: translateY(0px);
   }
+}
+
+.view_details_button,
+.product_type_external {
+  background-color: rgba(0, 0, 0, 0.9);
+  width: 42%;
+  padding: 13px 10px 14px 10px;
+  border-radius: 0;
+  font-weight: 400;
+  font-size: 16px;
+  color: #fff;
+  line-height: 28px;
+  display: inline-block;
+}
+
+.button-detail,
+.button-cart {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.button-detail:hover,
+.button-cart:hover {
+  color: white;
+}
+
+.product_type_external {
+  background-color: rgba(9, 39, 111, 0.8);
+}
+
+.product-data {
+  position: relative;
+}
+
+.product-image {
+  overflow: hidden;
+}
+
+.action-button {
+  position: absolute;
+  width: 101%;
+  bottom: 0;
+  transform: translateY(-61px);
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.product-data:hover .action-button {
+  opacity: 1;
+  visibility: visible;
+}
+
+.product-image img {
+  border-bottom: 1px solid;
+}
+
+.product-data img {
+  transition: transform 0.3s ease;
+}
+
+.product-data:hover img {
+  transform: scale(1.08);
+}
+
+.slick-next {
+  display: none !important;
+}
+
+.contact-title {
+  font-size: 30px;
+  color: #12ac4c;
+  line-height: 45px;
+  text-align: center;
+}
+
+.btn-submit {
+  border: none;
+  background-color: #12ac4c;
+  padding: 10px 25px;
+}
+
+.btn-submit:hover {
+  background-color: #f4511e;
 }

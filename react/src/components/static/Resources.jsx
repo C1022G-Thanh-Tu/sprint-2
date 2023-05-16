@@ -3,6 +3,13 @@ import React from "react";
 function Resources() {
   return (
     <>
+      <div className="wrapper_inner_banner">
+        <img
+          src="https://chanhviet.com/wp-content/uploads/2019/11/tin-tuc-chanh-viet-com.jpg"
+          alt=""
+          width={"100%"}
+        />
+      </div>
       <div>
         <div className="container mt-5" style={{ padding: "70xp 15px" }}>
           <header className="entry-header">
@@ -23,11 +30,11 @@ function Resources() {
                   <p className="published-on m-0">Published On - 10/31/2019</p>
                   <div className="meta">
                     <span className="me-3">
-                      <i class="bi bi-person pe-2"></i>
+                      <i className="bi bi-person pe-2"></i>
                       <span>Công ty Chanh Việt</span>
                     </span>
                     <span>
-                      <i class="bi bi-grid-fill pe-2"></i>
+                      <i className="bi bi-grid-fill pe-2"></i>
                       <span>Câu chuyện Chanh Việt, Tin tức</span>
                     </span>
                   </div>

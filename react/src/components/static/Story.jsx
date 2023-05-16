@@ -3,6 +3,13 @@ import React from "react";
 function Story() {
   return (
     <>
+      <div className="wrapper_inner_banner">
+        <img
+          src="https://chanhviet.com/wp-content/uploads/2019/11/tin-tuc-chanh-viet-com.jpg"
+          alt=""
+          width={"100%"}
+        />
+      </div>
       <div
         className="container mt-5"
         style={{ padding: "70xp 15px", maxWidth: "1200px" }}
@@ -203,7 +210,7 @@ function Story() {
           className="mt-3 container pt-4 pb-4 d-flex flex-row align-items-center"
           style={{ maxWidth: "1200px", backgroundColor: "#ddd" }}
         >
-          <i class="bi bi-quote" style={{ fontSize: "70px" }}></i>
+          <i className="bi bi-quote" style={{ fontSize: "70px" }}></i>
           <p style={{ textAlign: "justify" }}>
             Trải qua hành trình gắn bó với cây chanh và xây dựng chuỗi giá trị
             cho nông sản Việt, <b>Công ty Chanh Việt</b> đã đạt nhiều giấy khen
