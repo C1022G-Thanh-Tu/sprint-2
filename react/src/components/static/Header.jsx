@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 
 function Header() {
+  const name = localStorage.getItem("name");
   return (
     <>
       <div className="top-bar bg-dark pt-2 pb-2">
@@ -119,7 +120,7 @@ function Header() {
                 </NavLink>
               </li>
               <li className="nav-item flex-1 pe-5">
-                <NavLink to={'/contact'} className="nav-link main-color fs-5">
+                <NavLink to={"/contact"} className="nav-link main-color fs-5">
                   Liên hệ
                 </NavLink>
               </li>
@@ -128,6 +129,32 @@ function Header() {
           <NavLink to="/cart" className="navbar-brand">
             <i className="bi bi-cart"></i>
           </NavLink>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+            >
+              Dropdown button
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
+                  Action
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  Another action
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  Something else here
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </nav>
     </>

@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-import java.security.SignatureException;
 import java.util.Date;
 @Component
 public class JwtTokenProvider {
@@ -16,7 +14,8 @@ public class JwtTokenProvider {
 
     public String createToken(Authentication authentication){
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
-        return Jwts.builder().setSubject(userPrinciple.getUsername()).setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime()+jwtExpiration*1000))
+        return Jwts.builder().setSubject(userPrinciple.getUsername())
+                .setIssuedAt(new Date()).setExpiration(new Date(new Date().getTime()+jwtExpiration*1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

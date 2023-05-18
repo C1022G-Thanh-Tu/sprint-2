@@ -1,16 +1,19 @@
 package com.example.api.controller.authentication;
 
 import com.example.api.dto.request.ChangePasswordRequest;
+import com.example.api.dto.request.RegisterForm;
 import com.example.api.dto.request.ResetPasswordRequest;
 import com.example.api.dto.request.SignInForm;
 import com.example.api.dto.response.JwtResponse;
 import com.example.api.dto.response.ResponseMessage;
 import com.example.api.dto.user.UserMailDTO;
 import com.example.api.dto.user.UserOtpDTO;
+import com.example.api.entity.user.Role;
 import com.example.api.entity.user.User;
 import com.example.api.security.JwtTokenProvider;
 import com.example.api.security.UserPrinciple;
 import com.example.api.service.mail.IEmailService;
+import com.example.api.service.user.IRoleService;
 import com.example.api.service.user.IUserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -22,15 +25,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -43,6 +45,10 @@ public class AuthRestController {
     private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private IEmailService iEmailService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private IRoleService roleService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated @RequestBody SignInForm signInForm, BindingResult bindingResult) {
@@ -67,6 +73,34 @@ public class AuthRestController {
             return ResponseEntity.ok(new JwtResponse(token, userPrinciple.getUsername(),
                     userPrinciple.getAuthorities(),userPrinciple.getName()));
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegisterForm registerForm){
+
+        if(userService.existsByUsername(registerForm.getUsername())){
+            return new ResponseEntity<>("Tên đăng ký đã tồn tại!.", HttpStatus.BAD_REQUEST);
+        }
+
+        if(userService.existsByEmail(registerForm.getEmail())){
+            return new ResponseEntity<>("Email đã tồn tại!.", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = new User();
+        user.setName(registerForm.getName());
+        user.setUserName(registerForm.getUsername());
+        user.setEmail(registerForm.getEmail());
+        user.setGender(registerForm.isGender());
+        user.setAddress(registerForm.getAddress());
+        user.setDateOfBirth(registerForm.getDateOfBirth());
+        user.setPhoneNumber(registerForm.getPhoneNumber());
+        user.setPassword(passwordEncoder.encode(registerForm.getPassword()));
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleService.findByName("ROLE_USER").get();
+        roles.add(userRole);
+        user.setRoles(roles);
+        userService.save(user);
+        return new ResponseEntity<>("Đăng ký thành công!.", HttpStatus.CREATED);
     }
 
     @PutMapping("/change-password")

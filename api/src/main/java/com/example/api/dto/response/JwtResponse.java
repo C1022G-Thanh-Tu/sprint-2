@@ -10,6 +10,7 @@ public class JwtResponse {
     private String userName;
     private String name;
     private Collection<? extends GrantedAuthority> roles;
+
     public JwtResponse() {
     }
 
