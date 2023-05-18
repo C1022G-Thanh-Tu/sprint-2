@@ -17,19 +17,27 @@ public class UserPrinciple implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    private String avatar;
+
     private Collection<? extends GrantedAuthority> roles;
+
+    public UserPrinciple(Integer id, String name, String userName, String email, String password, List<GrantedAuthority> authorities) {
+        this.id = id;
+        this.name = name;
+        this.username = userName;
+        this.email = email;
+        this.password = password;
+        this.roles = authorities;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
 
     public UserPrinciple() {
     }
 
-    public UserPrinciple(Integer id, String name, String username, String email, String password,  Collection<? extends GrantedAuthority> roles) {
-        this.id = id;
-        this.name = name;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
     public static UserPrinciple build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
@@ -42,6 +50,7 @@ public class UserPrinciple implements UserDetails {
                 authorities
         );
     }
+
     public Integer getId() {
         return id;
     }
@@ -50,16 +59,24 @@ public class UserPrinciple implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Collection<? extends GrantedAuthority> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<? extends GrantedAuthority> roles) {
+        this.roles = roles;
     }
 
     public String getEmail() {
@@ -74,46 +91,42 @@ public class UserPrinciple implements UserDetails {
         this.password = password;
     }
 
-    public Collection<? extends GrantedAuthority> getRoles() {
-        return roles;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setRoles(Collection<? extends GrantedAuthority> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+    public String getName() {
+        return name;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
 }

@@ -20,4 +20,5 @@ public interface IUserService {
 
     void updateOtp(User user);
     List<User> getAll();
+    void save(User user);
 }

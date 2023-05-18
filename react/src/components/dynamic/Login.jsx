@@ -1,98 +1,661 @@
 import React from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import loginService from "../../service/loginService";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import loginStyle from "./loginStyle.module.css";
+import * as Yup from "yup";
+import { RotatingLines } from "react-loader-spinner";
+import Swal from "sweetalert2";
 
 function Login() {
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [showFormResetPass, setShowFormResetPass] = useState(false);
+  const [showFormEmail, setShowFormEmail] = useState(false);
+  const [mail, setMail] = useState("");
+  const [submit, setSubmit] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    document.title = "Đăng Nhập"; // Thay đổi title
+  }, []);
+
+  const handleShowFromEmail = () => {
+    setShowFormEmail(true);
+  };
+
+  const handleHideEmail = () => {
+    setShowFormEmail(false);
+  };
+
+  const handleHideOtp = () => {
+    setShowOtpModal(false);
+  };
+
+  const handleHideResetPass = () => {
+    setShowFormResetPass(false);
+  };
+
+  const handleAgainSendCode = async () => {
+    setSubmit(true);
+    try {
+      await loginService.forgotPassword({ email: mail });
+      setSubmit(false);
+      setCountdown(60);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCountdown((countdown) => countdown - 1);
+    }, 1000);
+    if (countdown === 0) {
+      clearInterval(intervalId);
+    }
+    return () => clearInterval(intervalId);
+  }, [countdown]);
   return (
     <>
-      <div
-        className="login-container"
-        style={{
-          background:
-            'url("https://img6.thuthuatphanmem.vn/uploads/2022/03/15/background-am-thuc-don-gian-dep-nhat_081313511.jpg") top center / cover no-repeat',
-        }}
+      <section
+        className={`${loginStyle.gradientForm}`}
+        style={
+          showFormEmail || showOtpModal || showFormResetPass
+            ? { opacity: "70%" }
+            : {}
+        }
       >
-        <div className="d-flex justify-content-center align-items-center vh-100">
-          <section
-            className="pt-5 pb-5 pe-2"
-            style={{ border: "10px solid #000" }}
-          >
-            <div className="container-fluid h-custom">
-              <div className="row d-flex justify-content-center align-items-center h-100">
-                <div className="col-md-9 col-lg-6 col-xl-5 text-center">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2020/06/1-19.jpg"
-                    className="img-fluid"
-                    alt="Sample"
-                    width="100%"
-                  />
+        <div
+          className="login-container"
+          style={{
+            background:
+              'url("https://img6.thuthuatphanmem.vn/uploads/2022/03/15/background-am-thuc-don-gian-dep-nhat_081313511.jpg") top center / cover no-repeat',
+          }}
+        >
+          <div className="d-flex justify-content-center align-items-center vh-100">
+            <section
+              className="pt-5 pb-5 pe-2"
+              style={{ border: "10px solid #000" }}
+            >
+              <div className="container-fluid h-custom">
+                <div className="row d-flex justify-content-center align-items-center h-100">
+                  <div className="col-md-9 col-lg-6 col-xl-5 text-center">
+                    <img
+                      src="https://chanhviet.com/wp-content/uploads/2020/06/1-19.jpg"
+                      className="img-fluid"
+                      alt="Sample"
+                      width="100%"
+                    />
+                  </div>
+                  <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    <Formik
+                      initialValues={{
+                        username: "",
+                        password: ""
+                      }}
+                      onSubmit={(value) => {
+                        console.log(value);
+                        const login = async () => {
+                          try {
+                            const rs = await loginService.login(value);
+                            localStorage.setItem("token", rs.data.token);
+                            localStorage.setItem("name", rs.data.name);
+                            localStorage.setItem(
+                              "roles",
+                              rs.data.roles[0].authority
+                            );
+                            Swal.fire({
+                              icon: "success",
+                              title: "Đăng nhập thành công",
+                              showConfirmButton: false,
+                              timer: 1500,
+                            });
+                            navigate("/");
+                          } catch (error) {
+                            console.log(error);
+                            const err = error.response.data;
+                            if (err.username === "Không được bỏ trống") {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText = "Không được bỏ trống";
+                            } else if (
+                              err.message === "Tên người dùng không tồn tại"
+                            ) {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText = "Tên người dùng không tồn tại";
+                            } else if (
+                              err.username ===
+                              "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự"
+                            ) {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText =
+                                "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự";
+                            } else if (
+                              err.username ===
+                              "Tên đăng nhập không được chứa ký tự đặc biệt"
+                            ) {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText =
+                                "Tên đăng nhập không được chứa ký tự đặc biệt";
+                            } else {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText = "";
+                            }
+
+                            if (err.password === "Không được bỏ trống") {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText = "Không được bỏ trống";
+                            } else if (
+                              err.password ===
+                              "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
+                            ) {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText =
+                                "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
+                            } else if (err === "" || err.status === 403) {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText = "Mật khẩu không chính xác";
+                            } else if (
+                              err.password ===
+                              "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
+                            ) {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText =
+                                "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
+                            } else {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText = "";
+                            }
+                          }
+                        };
+                        login();
+                      }}
+                    >
+                      <Form>
+                        <div className="form-outline mb-4">
+                          <i className="bi bi-person-fill pe-1" />{" "}
+                          <label className="form-label" htmlFor="username">
+                            Username
+                          </label>
+                          <Field
+                            type="text"
+                            name="username"
+                            id="username"
+                            className="form-control form-control-lg"
+                          />
+                        </div>
+                        <div className="form-outline mb-3">
+                          <div>
+                            <i className="bi bi-lock-fill pe-1" />
+                            <label className="form-label" htmlFor="password">
+                              Mật khẩu
+                            </label>
+                          </div>
+                          <div className="position-relative">
+                            <Field
+                              type={showPassword ? "text" : "password"}
+                              name="password"
+                              id="password"
+                              className="form-control form-control-lg"
+                            />
+                            {showPassword ? (
+                              <i
+                                type="button"
+                                onClick={() => {
+                                  setShowPassword(!showPassword);
+                                }}
+                                className="bi bi-eye-slash-fill position-absolute top-50 translate-middle-y me-2 end-0"
+                              ></i>
+                            ) : (
+                              <i
+                                type="button"
+                                onClick={() => {
+                                  setShowPassword(!showPassword);
+                                }}
+                                className="bi bi-eye-fill position-absolute top-50 translate-middle-y me-2 end-0"
+                              ></i>
+                            )}
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between align-items-center">
+                          <a
+                            href="#"
+                            onClick={handleShowFromEmail}
+                            className={`text-muted text-body ${loginStyle.bgForgotPassword}`}
+                          >
+                            Quên mật khẩu
+                          </a>
+                        </div>
+                        <div className="text-center text-lg-start mt-4 pt-2">
+                          <button
+                            type="submit"
+                            className="btn btn-primary btn-lg"
+                            style={{
+                              paddingLeft: "2.5rem",
+                              paddingRight: "2.5rem",
+                            }}
+                          >
+                            Đăng nhập
+                          </button>
+                          <p className="small fw-bold mt-2 pt-1 mb-0">
+                            Chưa có tài khoản?{" "}
+                            <a href="#!" className="link-danger">
+                              Đăng ký
+                            </a>
+                          </p>
+                        </div>
+                      </Form>
+                    </Formik>
+                  </div>
                 </div>
-                <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                  <form>
-                    <div className="form-outline mb-4">
-                      <i className="bi bi-person-fill pe-1" />{" "}
-                      <label className="form-label" htmlFor="form3Example3">
-                        Username
-                      </label>
-                      <input
-                        type="email"
-                        id="form3Example3"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
-                    <div className="form-outline mb-3">
-                      <i className="bi bi-lock-fill pe-1" />
-                      <label className="form-label" htmlFor="form3Example4">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        id="form3Example4"
-                        className="form-control form-control-lg"
-                      />
-                    </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <div className="form-check mb-0">
-                        <input
-                          className="form-check-input me-2"
-                          type="checkbox"
-                          defaultValue=""
-                          id="form2Example3"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="form2Example3"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                      <a href="#!" className="text-body">
-                        Forgot password?
-                      </a>
-                    </div>
-                    <div className="text-center text-lg-start mt-4 pt-2">
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      {showFormEmail && (
+        <Formik
+          initialValues={{
+            email: "",
+          }}
+          onSubmit={(value, { setSubmitting }) => {
+            const sendEmail = async () => {
+              try {
+                const res = await loginService.forgotPassword(value);
+                setMail(res.data);
+                setShowFormEmail(false);
+                setShowOtpModal(true);
+                setSubmitting(false);
+                setCountdown(60);
+              } catch (error) {
+                setSubmitting(false);
+                if (error.response.data.email === "Không được để trống") {
+                  document.getElementById("emailErr").innerHTML =
+                    "Không được để trống";
+                } else if (
+                  error.response.data.email ===
+                  "Vui lòng nhập đúng định dạng Email VD: abc123@codegym.com"
+                ) {
+                  document.getElementById("emailErr").innerHTML =
+                    "Vui lòng nhập đúng định dạng Email VD: abc123@codegym.com";
+                } else if (
+                  error.response.data.message === "Không tìm thấy email"
+                ) {
+                  document.getElementById("emailErr").innerHTML =
+                    "Email xác nhận không chính xác";
+                } else {
+                  document.getElementById("emailErr").innerHTML = "";
+                }
+              }
+            };
+            sendEmail();
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="modal d-block" id="exampleModal" tabIndex={-1}>
+                <div className="modal-dialog">
+                  <div className="modal-content" style={{ marginTop: 270 }}>
+                    <div className="modal-header">
                       <button
                         type="button"
-                        className="btn btn-primary btn-lg"
-                        style={{
-                          paddingLeft: "2.5rem",
-                          paddingRight: "2.5rem",
-                        }}
-                      >
-                        Login
-                      </button>
-                      <p className="small fw-bold mt-2 pt-1 mb-0">
-                        Don't have an account?{" "}
-                        <a href="#!" className="link-danger">
-                          Register
-                        </a>
-                      </p>
+                        className="btn-close"
+                        onClick={handleHideEmail}
+                        aria-label="Close"
+                      />
                     </div>
-                  </form>
+                    <div className="modal-body">
+                      <div>
+                        <label htmlFor="email" className="form-label fw-bold">
+                          Xác Nhận Email:
+                        </label>
+                      </div>
+                      <div>
+                        <Field
+                          className="form-control"
+                          name="email"
+                          id="email"
+                          placeholder="Nhập Email xác nhận..."
+                        />
+                      </div>
+                      <div>
+                        <span className="text-danger" id="emailErr"></span>
+                      </div>
+                    </div>
+                    {isSubmitting ? (
+                      <div className="d-flex justify-content-end me-3 pb-2">
+                        <RotatingLines
+                          strokeColor="grey"
+                          strokeWidth="5"
+                          animationDuration="0.75"
+                          width="30"
+                          visible={true}
+                        />
+                      </div>
+                    ) : (
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={handleHideEmail}
+                        >
+                          Hủy
+                        </button>
+                        <button type="submit" className="btn btn-primary">
+                          Xác nhận
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      )}
+
+      {showOtpModal && (
+        <Formik
+          initialValues={{
+            code: "",
+            email: mail,
+          }}
+          onSubmit={(value) => {
+            const sendOtp = async () => {
+              try {
+                await loginService.checkOtp(value);
+                setShowOtpModal(false);
+                setShowFormResetPass(true);
+              } catch (error) {
+                console.log(error);
+                if (error.response.data.message === "Mã OTP không chính xác") {
+                  document.getElementById("codeErr").innerHTML =
+                    "Mã OTP không chính xác hoặc đã hết hạn";
+                } else if (error.response.data.code === "Không được để trống") {
+                  document.getElementById("codeErr").innerHTML =
+                    "Không được để trống";
+                } else if (
+                  error.response.data.code ===
+                  "Vui lòng nhập đúng định dạng OTP VD:XXXXXX (X là chữ số)"
+                ) {
+                  document.getElementById("codeErr").innerHTML =
+                    "Vui lòng nhập đúng định dạng OTP VD:XXXXXX (X là chữ số)";
+                } else {
+                  document.getElementById("codeErr").innerHTML = "";
+                }
+              }
+            };
+            sendOtp();
+          }}
+        >
+          <Form>
+            <div className="modal d-block" tabIndex={-1}>
+              <div className="modal-dialog">
+                <div
+                  className="modal-content"
+                  style={{
+                    marginTop: 270,
+                  }}
+                >
+                  <div className="modal-header">
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={handleHideOtp}
+                      aria-label="Close"
+                    />
+                  </div>
+                  <div className="modal-body">
+                    <div>
+                      <label htmlFor="code" className="form-label fw-bold">
+                        Xác Nhận Mã OTP:
+                      </label>
+                    </div>
+                    <div>
+                      <Field
+                        className="form-control"
+                        name="code"
+                        placeholder="Nhập mã OTP....."
+                      />
+                    </div>
+                    {submit ? (
+                      <div className="mt-2 d-flex justify-content-end">
+                        <RotatingLines
+                          strokeColor="grey"
+                          strokeWidth="5"
+                          animationDuration="0.75"
+                          width="30"
+                          visible={true}
+                        />
+                      </div>
+                    ) : (
+                      <div className="mt-2">
+                        <span className="text-danger" id="codeErr"></span>
+                        {countdown === 0 ? (
+                          // eslint-disable-next-line react/jsx-no-comment-textnodes
+                          <div className="mt-2">
+                            // eslint-disable-next-line
+                            jsx-a11y/anchor-is-valid, jsx-a11y/anchor-is-valid
+                            <a
+                              className="float-end text-black text-decoration-none  bg-forgot-password"
+                              onClick={handleAgainSendCode}
+                            >
+                              Gửi lại mã
+                            </a>
+                          </div>
+                        ) : (
+                          <div className="mt-2">
+                            <span className="float-end text-muted">
+                              {" "}
+                              ({countdown}) Gửi lại mã
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={handleHideOtp}
+                    >
+                      Hủy
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      Xác nhận
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </div>
+          </Form>
+        </Formik>
+      )}
+
+      {showFormResetPass && (
+        <Formik
+          initialValues={{
+            newPassword: "",
+            confirmPassword: "",
+            email: mail,
+          }}
+          onSubmit={(value) => {
+            const resetPassword = async () => {
+              try {
+                await loginService.resetPassword(value);
+                setShowFormResetPass(false);
+                Swal.fire({
+                  icon: "success",
+                  title: "Thay đổi mật khẩu thành công",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+              } catch (error) {
+                const err = error.response.data;
+                if (err.newPassword === "Không được bỏ trống") {
+                  document.getElementById("newPasswordErr").innerHTML =
+                    "Không được bỏ trống";
+                } else if (
+                  err.newPassword ===
+                  "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
+                ) {
+                  document.getElementById("newPasswordErr").innerHTML =
+                    "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
+                } else {
+                  document.getElementById("newPasswordErr").innerHTML = "";
+                }
+                if (err.message === "Mật khẩu xác nhận không trùng khớp") {
+                  document.getElementById("confirmPasswordErr").innerHTML =
+                    "Mật khẩu xác nhận không trùng khớp";
+                } else if (err.confirmPassword === "Không được bỏ trống") {
+                  document.getElementById("confirmPasswordErr").innerHTML =
+                    "Không được bỏ trống";
+                } else if (
+                  err.confirmPassword ===
+                  "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
+                ) {
+                  document.getElementById("confirmPasswordErr").innerHTML =
+                    "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
+                } else {
+                  document.getElementById("confirmPasswordErr").innerHTML = "";
+                }
+              }
+            };
+            resetPassword();
+          }}
+        >
+          <Form>
+            <div className="modal d-block" tabIndex={-1}>
+              <div className="modal-dialog">
+                <div
+                  className="modal-content"
+                  style={{
+                    marginTop: 270,
+                  }}
+                >
+                  <div className="modal-header">
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={handleHideResetPass}
+                      aria-label="Close"
+                    />
+                  </div>
+
+                  <div className="modal-body">
+                    <div className="mt-2">
+                      <label
+                        htmlFor="newPassword"
+                        className="fw-bold form-label"
+                      >
+                        Mật khẩu mới:
+                      </label>
+                    </div>
+                    <div className="position-relative">
+                      <Field
+                        type={showNewPassword ? "text" : "password"}
+                        id="newPassword"
+                        className="form-control"
+                        name="newPassword"
+                        placeholder="Nhập mật khẩu mới"
+                      />
+                      {showNewPassword ? (
+                        <i
+                          type="button"
+                          onClick={() => {
+                            setShowNewPassword(!showNewPassword);
+                          }}
+                          className={`bi bi-eye-slash-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                        ></i>
+                      ) : (
+                        <i
+                          type="button"
+                          onClick={() => {
+                            setShowNewPassword(!showNewPassword);
+                          }}
+                          className={`bi bi-eye-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                        ></i>
+                      )}
+                    </div>
+                    <div>
+                      <span className="text-danger" id="newPasswordErr"></span>
+                    </div>
+                    <div className="mt-2">
+                      <label
+                        htmlFor="confirmPassword"
+                        className="fw-bold form-label"
+                      >
+                        Xác nhận mật khẩu:
+                      </label>
+                    </div>
+                    <div className="position-relative">
+                      <Field
+                        type={showConfirmPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        className="form-control"
+                        name="confirmPassword"
+                        placeholder="Xác nhận mật khẩu mới"
+                      />
+                      {showConfirmPassword ? (
+                        <i
+                          type="button"
+                          onClick={() => {
+                            setShowConfirmPassword(!showConfirmPassword);
+                          }}
+                          className={`bi bi-eye-slash-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                        ></i>
+                      ) : (
+                        <i
+                          type="button"
+                          onClick={() => {
+                            setShowConfirmPassword(!showConfirmPassword);
+                          }}
+                          className={`bi bi-eye-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                        ></i>
+                      )}
+                    </div>
+                    <div>
+                      <span
+                        className="text-danger"
+                        id="confirmPasswordErr"
+                      ></span>
+                    </div>
+                    <div className="modal-footer">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={handleHideResetPass}
+                      >
+                        Hủy
+                      </button>
+                      <button type="submit" className="btn btn-primary">
+                        Xác nhận
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Form>
+        </Formik>
+      )}
     </>
   );
 }
