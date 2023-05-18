@@ -213,7 +213,7 @@ html {
 }
 
 .product-image img {
-  border-bottom: 1px solid;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);;
 }
 
 .product-data img {
@@ -243,4 +243,20 @@ html {
 
 .btn-submit:hover {
   background-color: #f4511e;
+}
+
+.cart-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.cart-badge {
+  position: absolute;
+  background-color: red;
+  top: 0;
+  transform: translate(-44%,160%);
+  color: white;
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: 50%;
 }

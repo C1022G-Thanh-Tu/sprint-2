@@ -2,14 +2,14 @@ import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 function Header() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('roles')
-    localStorage.removeItem('name')
-    navigate('/login')
-}
+    localStorage.removeItem("token");
+    localStorage.removeItem("roles");
+    localStorage.removeItem("name");
+    navigate("/");
+  };
   const name = localStorage.getItem("name");
   return (
     <>
@@ -136,22 +136,33 @@ function Header() {
           </div>
           <NavLink to="/cart" className="navbar-brand">
             <i className="bi bi-cart"></i>
+            <span class="cart-badge">3</span>
           </NavLink>
           {!name ? (
-            <NavLink to={'/login'} style={{ textDecoration: "none" }} className='fs-5'>Đăng nhập</NavLink>
+            <NavLink
+              to={"/login"}
+              style={{ textDecoration: "none", width: "180px" }}
+              className="fs-5"
+            >
+              Đăng nhập
+            </NavLink>
           ) : (
             <div class="dropdown">
               <a
                 className="dropdown-toggle fs-5"
                 type="button"
                 data-bs-toggle="dropdown"
-                style={{ textDecoration: "none" }}
+                style={{ textDecoration: "none", width: "180px" }}
               >
                 {name}
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a onClick={handleLogout} class="dropdown-item" href="#">
+                  <a
+                    onClick={handleLogout}
+                    class="dropdown-item"
+                    href="#"
+                  >
                     Đăng xuất
                   </a>
                 </li>

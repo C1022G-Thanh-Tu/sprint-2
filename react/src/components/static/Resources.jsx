@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 function Resources() {
+  useEffect(() => {
+    document.title = "Giới thiệu";
+  }, []);
   return (
     <>
       <div className="wrapper_inner_banner">

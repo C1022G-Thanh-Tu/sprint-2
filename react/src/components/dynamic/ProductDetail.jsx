@@ -38,9 +38,12 @@ function ProductDetail() {
                       <li>Dễ dàng hơn cho món ngon mỗi ngày</li>
                       <li>Hàng Việt Nam chất lượng cao</li>
                     </ul>
-                    <button className="btn btn-success rounded-pill mb-3">
-                      Thêm vào giỏ hàng
-                    </button>
+                    <div className="d-flex align-items-center mb-3 gap-2">
+                      <input type="number" style={{width: '50px'}} />
+                      <button className="btn btn-success rounded-pill">
+                        Thêm vào giỏ hàng
+                      </button>
+                    </div>
                     <p className="m-0">
                       <b>Thương hiệu:</b> CHAVI Việt Nam
                     </p>
@@ -63,10 +66,7 @@ function ProductDetail() {
             </div>
 
             <div className="col-4">
-              <h1
-                style={{ fontSize: "24px" }}
-                className="pt-5 text-center"
-              >
+              <h1 style={{ fontSize: "24px" }} className="pt-5 text-center">
                 SẢN PHẨM TƯƠNG TỰ
               </h1>
 
@@ -92,7 +92,10 @@ function ProductDetail() {
                     </span>
 
                     <span className="product_type_external">
-                      <button className="button-cart" style={{border: 'none', background: 'none'}}>
+                      <button
+                        className="button-cart"
+                        style={{ border: "none", background: "none" }}
+                      >
                         <i className="bi bi-cart"></i>
                       </button>
                     </span>
@@ -132,7 +135,10 @@ function ProductDetail() {
                     </span>
 
                     <span className="product_type_external">
-                      <button className="button-cart" style={{border: 'none', background: 'none'}}>
+                      <button
+                        className="button-cart"
+                        style={{ border: "none", background: "none" }}
+                      >
                         <i className="bi bi-cart"></i>
                       </button>
                     </span>
@@ -172,7 +178,10 @@ function ProductDetail() {
                     </span>
 
                     <span className="product_type_external">
-                      <button className="button-cart" style={{border: 'none', background: 'none'}}>
+                      <button
+                        className="button-cart"
+                        style={{ border: "none", background: "none" }}
+                      >
                         <i className="bi bi-cart"></i>
                       </button>
                     </span>

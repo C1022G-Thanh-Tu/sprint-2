@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Product() {
+  useEffect(() => {
+    document.title = "Sản phẩm";
+  }, []);
   return (
     <>
       <div className="wrapper_inner_banner">
@@ -21,7 +24,7 @@ function Product() {
               Sản phẩm CHAVI
             </h2>
           
-            <div className="d-flex mb-3 justify-content-end">
+            <div className="d-flex mb-3 justify-content-end gap-2">
               <div id="search-autocomplete" className="form-outline">
                 <input type="search" id="form1" className="form-control" placeholder="Tìm kiếm ..."/>
               </div>
@@ -45,7 +48,6 @@ function Product() {
                     <i className="bi bi-eye pe-2"></i>
                     <Link
                       to={"/product-detail"}
-                      href="#"
                       className="button-detail"
                     >
                       Chi tiết

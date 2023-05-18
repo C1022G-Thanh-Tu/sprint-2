@@ -1,11 +1,12 @@
 import React from "react";
-import { Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import loginService from "../../service/loginService";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import loginStyle from "./loginStyle.module.css";
 import { RotatingLines } from "react-loader-spinner";
 import Swal from "sweetalert2";
+import * as Yup from "yup";
 
 function Login() {
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -14,13 +15,13 @@ function Login() {
   const [mail, setMail] = useState("");
   const [submit, setSubmit] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const navigate = useNavigate();
   useEffect(() => {
-    document.title = "Đăng Nhập"; // Thay đổi title
+    document.title = "Đăng Nhập";
   }, []);
 
   const handleShowFromEmail = () => {
@@ -97,6 +98,20 @@ function Login() {
                         username: "",
                         password: "",
                       }}
+                      validationSchema={Yup.object({
+                        password: Yup.string()
+                          .required("Trường này bắt buộc nhập")
+                          .min(5, "Tên phải chứa ít nhất 5 ký tự")
+                          .max(20, "Tên không được vượt quá 20 ký tự"),
+                        username: Yup.string()
+                          .required("Trường này bắt buộc nhập")
+                          .matches(
+                            "^[a-zA-Z0-9]*$",
+                            "Tên đăng nhập không được chứa ký tự đặc biệt"
+                          )
+                          .min(5, "Tên phải chứa ít nhất 5 ký tự")
+                          .max(20, "Tên không được vượt quá 20 ký tự"),
+                      })}
                       onSubmit={(value) => {
                         const login = async () => {
                           try {
@@ -117,66 +132,17 @@ function Login() {
                           } catch (error) {
                             console.log(error);
                             const err = error.response.data;
-                            if (err.username === "Không được bỏ trống") {
-                              document.getElementById(
-                                "usernameError"
-                              ).innerText = "Không được bỏ trống";
-                            } else if (
+                            if (
                               err.message === "Tên người dùng không tồn tại"
                             ) {
                               document.getElementById(
                                 "usernameError"
                               ).innerText = "Tên người dùng không tồn tại";
-                            } else if (
-                              err.username ===
-                              "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                            ) {
-                              document.getElementById(
-                                "usernameError"
-                              ).innerText =
-                                "Tên đăng nhập ít nhất 5 ký tự và nhiều nhất 20 ký tự";
-                            } else if (
-                              err.username ===
-                              "Tên đăng nhập không được chứa ký tự đặc biệt"
-                            ) {
-                              document.getElementById(
-                                "usernameError"
-                              ).innerText =
-                                "Tên đăng nhập không được chứa ký tự đặc biệt";
-                            } else {
-                              document.getElementById(
-                                "usernameError"
-                              ).innerText = "";
                             }
-
-                            if (err.password === "Không được bỏ trống") {
-                              document.getElementById(
-                                "passwordError"
-                              ).innerText = "Không được bỏ trống";
-                            } else if (
-                              err.password ===
-                              "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                            ) {
-                              document.getElementById(
-                                "passwordError"
-                              ).innerText =
-                                "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
-                            } else if (err === "" || err.status === 403) {
+                            if (err === "" || err.status === 403) {
                               document.getElementById(
                                 "passwordError"
                               ).innerText = "Mật khẩu không chính xác";
-                            } else if (
-                              err.password ===
-                              "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự"
-                            ) {
-                              document.getElementById(
-                                "passwordError"
-                              ).innerText =
-                                "Mật khẩu ít nhất 5 ký tự và nhiều nhất 20 ký tự";
-                            } else {
-                              document.getElementById(
-                                "passwordError"
-                              ).innerText = "";
                             }
                           }
                         };
@@ -194,6 +160,11 @@ function Login() {
                             name="username"
                             id="username"
                             className="form-control form-control-lg"
+                          />
+                          <ErrorMessage
+                            name="username"
+                            component="div"
+                            className="text-danger"
                           />
                         </div>
                         <div>
@@ -233,6 +204,11 @@ function Login() {
                                 className="bi bi-eye-fill position-absolute top-50 translate-middle-y me-2 end-0"
                               ></i>
                             )}
+                            <ErrorMessage
+                              name="password"
+                              component="div"
+                              className="text-danger"
+                            />
                           </div>
                           <div>
                             <span
@@ -263,7 +239,7 @@ function Login() {
                           </button>
                           <p className="small fw-bold mt-2 pt-1 mb-0">
                             Chưa có tài khoản?{" "}
-                            <Link to={'/register'} className="link-danger">
+                            <Link to={"/register"} className="link-danger">
                               Đăng ký
                             </Link>
                           </p>
@@ -343,7 +319,9 @@ function Login() {
                           placeholder="Nhập Email xác nhận..."
                         />
                       </div>
-                      <div><span className="text-danger" id="emailErr"></span></div>
+                      <div>
+                        <span className="text-danger" id="emailErr"></span>
+                      </div>
                       <div>
                         <span className="text-danger" id="emailErr"></span>
                       </div>
@@ -605,7 +583,7 @@ function Login() {
                         ></i>
                       )}
                     </div>
-                                                                <span className="text-danger" id="newPasswordErr"></span>
+                    <span className="text-danger" id="newPasswordErr"></span>
                     <div>
                       <span className="text-danger" id="newPasswordErr"></span>
                     </div>
