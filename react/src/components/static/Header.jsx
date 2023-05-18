@@ -1,7 +1,15 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Header() {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('roles')
+    localStorage.removeItem('name')
+    navigate('/login')
+}
   const name = localStorage.getItem("name");
   return (
     <>
@@ -129,32 +137,27 @@ function Header() {
           <NavLink to="/cart" className="navbar-brand">
             <i className="bi bi-cart"></i>
           </NavLink>
-          <div class="dropdown">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-            >
-              Dropdown button
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" href="#">
-                  Action
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  Another action
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#">
-                  Something else here
-                </a>
-              </li>
-            </ul>
-          </div>
+          {!name ? (
+            <NavLink to={'/login'} style={{ textDecoration: "none" }} className='fs-5'>Đăng nhập</NavLink>
+          ) : (
+            <div class="dropdown">
+              <a
+                className="dropdown-toggle fs-5"
+                type="button"
+                data-bs-toggle="dropdown"
+                style={{ textDecoration: "none" }}
+              >
+                {name}
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a onClick={handleLogout} class="dropdown-item" href="#">
+                    Đăng xuất
+                  </a>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </nav>
     </>

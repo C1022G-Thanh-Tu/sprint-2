@@ -4,6 +4,10 @@ const login = (value)=>{
     return request.post('/login', { ...value })
 }
 
+const register = (value) => {
+    return request.post('/register', { ...value })
+}
+
 const changePassword = (value)=>{
     const token = localStorage.getItem('token')
     return request.put('/change-password',{ ...value }, {
@@ -30,6 +34,7 @@ const loginService = {
     changePassword,
     forgotPassword,
     checkOtp,
-    resetPassword
+    resetPassword,
+    register
 }
 export default loginService

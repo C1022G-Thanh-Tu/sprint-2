@@ -1,10 +1,9 @@
 import React from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import loginService from "../../service/loginService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import loginStyle from "./loginStyle.module.css";
-import * as Yup from "yup";
 import { RotatingLines } from "react-loader-spinner";
 import Swal from "sweetalert2";
 
@@ -96,10 +95,9 @@ function Login() {
                     <Formik
                       initialValues={{
                         username: "",
-                        password: ""
+                        password: "",
                       }}
                       onSubmit={(value) => {
-                        console.log(value);
                         const login = async () => {
                           try {
                             const rs = await loginService.login(value);
@@ -186,7 +184,7 @@ function Login() {
                       }}
                     >
                       <Form>
-                        <div className="form-outline mb-4">
+                        <div className="form-outline">
                           <i className="bi bi-person-fill pe-1" />{" "}
                           <label className="form-label" htmlFor="username">
                             Username
@@ -198,7 +196,13 @@ function Login() {
                             className="form-control form-control-lg"
                           />
                         </div>
-                        <div className="form-outline mb-3">
+                        <div>
+                          <span
+                            className="text-danger "
+                            id="usernameError"
+                          ></span>
+                        </div>
+                        <div className="form-outline mb-3 mt-3">
                           <div>
                             <i className="bi bi-lock-fill pe-1" />
                             <label className="form-label" htmlFor="password">
@@ -230,6 +234,12 @@ function Login() {
                               ></i>
                             )}
                           </div>
+                          <div>
+                            <span
+                              className="text-danger"
+                              id="passwordError"
+                            ></span>
+                          </div>
                         </div>
                         <div className="d-flex justify-content-between align-items-center">
                           <a
@@ -253,9 +263,9 @@ function Login() {
                           </button>
                           <p className="small fw-bold mt-2 pt-1 mb-0">
                             Chưa có tài khoản?{" "}
-                            <a href="#!" className="link-danger">
+                            <Link to={'/register'} className="link-danger">
                               Đăng ký
-                            </a>
+                            </Link>
                           </p>
                         </div>
                       </Form>
@@ -333,6 +343,7 @@ function Login() {
                           placeholder="Nhập Email xác nhận..."
                         />
                       </div>
+                      <div><span className="text-danger" id="emailErr"></span></div>
                       <div>
                         <span className="text-danger" id="emailErr"></span>
                       </div>
@@ -594,6 +605,7 @@ function Login() {
                         ></i>
                       )}
                     </div>
+                                                                <span className="text-danger" id="newPasswordErr"></span>
                     <div>
                       <span className="text-danger" id="newPasswordErr"></span>
                     </div>

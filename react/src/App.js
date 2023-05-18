@@ -11,6 +11,7 @@ import ProductDetail from "./components/dynamic/ProductDetail";
 import ShoppingCart from "./components/dynamic/ShoppingCart";
 import ScrollToTop from "./util/ScrollToTop";
 import Contact from "./components/static/Contact";
+import Register from "./components/dynamic/Register"
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/contact" element={<Contact />} />
           </Route>
+          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </ScrollToTop>
