@@ -162,7 +162,7 @@ function Register() {
                               </div>
                               <div className="position-relative">
                                 <Field
-                                  type="text"
+                                  type={showPassword ? "text" : "password"}
                                   className="form-control form-control-lg"
                                   id="password"
                                   name="password"
