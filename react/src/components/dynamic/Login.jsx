@@ -7,6 +7,7 @@ import loginStyle from "./loginStyle.module.css";
 import { RotatingLines } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
+import { GOOGLE_AUTH_URL } from '../constants/constants';
 
 function Login() {
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -93,6 +94,18 @@ function Login() {
                     />
                   </div>
                   <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+                    {/* <>
+                      <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                        <p className="lead fw-normal mb-0 me-3">Sign in with</p>
+                        <a className="btn btn-block social-btn google" href={GOOGLE_AUTH_URL}>
+                          <i className="bi bi-google" />
+                        </a>
+                      </div>
+                      <div className="divider d-flex align-items-center my-4">
+                        <p className="text-center fw-bold mx-3 mb-0">Or</p>
+                      </div>
+                    </> */}
+
                     <Formik
                       initialValues={{
                         username: "",
@@ -233,10 +246,22 @@ function Login() {
                             style={{
                               paddingLeft: "2.5rem",
                               paddingRight: "2.5rem",
+                              marginRight: "10px",
                             }}
                           >
                             Đăng nhập
                           </button>
+                          <Link
+                            to={"/"}
+                            type="button"
+                            className="btn btn-secondary btn-lg"
+                            style={{
+                              paddingLeft: "2.5rem",
+                              paddingRight: "2.5rem",
+                            }}
+                          >
+                            Trang chủ
+                          </Link>
                           <p className="small fw-bold mt-2 pt-1 mb-0">
                             Chưa có tài khoản?{" "}
                             <Link to={"/register"} className="link-danger">

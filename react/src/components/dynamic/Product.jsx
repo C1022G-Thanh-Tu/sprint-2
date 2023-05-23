@@ -1,10 +1,50 @@
-import React, { useEffect } from "react";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import productService from "../../service/productService";
 
 function Product() {
+  const [products, setProducts] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [isAppend, setIsAppend] = useState(false);
+  const [productFilter, setProductFilter] = useState({
+    page: 0,
+    name: "",
+  });
+
+  const handlePageClick = () => {
+    setProductFilter((prev) => ({ ...prev, page: prev.page + 1 }));
+    setIsAppend(true);
+  };
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const productsResponse = await productService.findByName(productFilter);
+        if (isAppend) {
+          setProducts((prev) => [...prev, ...productsResponse.data.content]);
+          setIsAppend(false)
+        } else {
+          setProducts(productsResponse.data.content);
+        }
+        setPageCount(productsResponse.data.totalPages);
+        document.getElementById("list-empty").innerHTML = "";
+        document.getElementById("load-more").style.display = "block";
+      } catch (error) {
+        console.warn(error);
+        setProducts(error.response.data.content);
+        document.getElementById("list-empty").innerHTML =
+          "Không tìm thấy kết quả";
+        document.getElementById("load-more").style.display = "none";
+      }
+    };
+    getProducts();
+  }, [productFilter]);
+
   useEffect(() => {
     document.title = "Sản phẩm";
   }, []);
+
   return (
     <>
       <div className="wrapper_inner_banner">
@@ -23,270 +63,102 @@ function Product() {
             >
               Sản phẩm CHAVI
             </h2>
-          
-            <div className="d-flex mb-3 justify-content-end gap-2">
-              <div id="search-autocomplete" className="form-outline">
-                <input type="search" id="form1" className="form-control" placeholder="Tìm kiếm ..."/>
-              </div>
-              <button type="button" className="btn btn-success">
-                <i className="bi bi-search"></i>
-              </button>
-            </div>
+
+            <Formik
+              initialValues={{
+                name: "",
+              }}
+              onSubmit={(value) => {
+                setProductFilter((prev) => {
+                  return { ...prev, ...value, page: 0 };
+                });
+              }}
+            >
+              <Form>
+                <div className="d-flex mb-5 justify-content-end gap-2">
+                  <div id="search-autocomplete" className="form-outline">
+                    <Field
+                      type="search"
+                      id="form1"
+                      className="form-control"
+                      placeholder="Tìm kiếm ..."
+                      name="name"
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-success">
+                    <i className="bi bi-search"></i>
+                  </button>
+                </div>
+              </Form>
+            </Formik>
 
             <div className="holder row">
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      className="button-detail"
+              {products.map((product, index) => (
+                <div className="product-data col-4 text-center" key={index}>
+                  <div className="product-image">
+                    <img
+                      src={product.productImgDTOS[0].url}
+                      alt=""
+                      width={350}
+                      height={350}
+                    />
+                  </div>
+                  <div className="action-button">
+                    <span className="view_details_button">
+                      <i className="bi bi-eye pe-2"></i>
+                      <Link
+                        to={`/product-detail/${product.id}`}
+                        className="button-detail"
+                      >
+                        Chi tiết
+                      </Link>
+                    </span>
+
+                    <span className="product_type_external">
+                      <i className="bi bi-cart pe-2"></i>
+                      <button
+                        className="button-cart"
+                        style={{ border: "none", background: "none" }}
+                      >
+                        Thêm vào giỏ
+                      </button>
+                    </span>
+                  </div>
+                  <div className="data mt-1">
+                    <h2
+                      style={{
+                        fontSize: "16px",
+                        color: "#12ac4c",
+                        lineHeight: "22px",
+                      }}
                     >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
+                      {product.name}
+                    </h2>
+                    <span>
+                      <b>
+                        {product.price.toLocaleString("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        })}
+                      </b>
+                    </span>
+                  </div>
                 </div>
-                <div className="data mt-2">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
-              </div>
-
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      href="#"
-                      className="button-detail"
-                    >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
-                </div>
-                <div className="data mt-1">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
-              </div>
-
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      href="#"
-                      className="button-detail"
-                    >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
-                </div>
-                <div className="data mt-1">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
-              </div>
+              ))}
             </div>
-
-            <div className="holder row">
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      href="#"
-                      className="button-detail"
-                    >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
-                </div>
-                <div className="data mt-1">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
+            {productFilter.page + 1 === pageCount ? (
+              <div className="text-center mt-5" id="load-more"></div>
+            ) : (
+              <div className="text-center mt-5" id="load-more">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => handlePageClick()}
+                >
+                  Xem thêm
+                </button>
               </div>
-
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      href="#"
-                      className="button-detail"
-                    >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
-                </div>
-                <div className="data mt-1">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
-              </div>
-
-              <div className="product-data col-4 text-center">
-                <div className="product-image">
-                  <img
-                    src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-                    alt=""
-                    width={350}
-                    height={350}
-                  />
-                </div>
-                <div className="action-button">
-                  <span className="view_details_button">
-                    <i className="bi bi-eye pe-2"></i>
-                    <Link
-                      to={"/product-detail"}
-                      href="#"
-                      className="button-detail"
-                    >
-                      Chi tiết
-                    </Link>
-                  </span>
-
-                  <span className="product_type_external">
-                    <i className="bi bi-cart pe-2"></i>
-                    <button className="button-cart" style={{border: 'none', background: 'none'}}>
-                      Thêm vào giỏ
-                    </button>
-                  </span>
-                </div>
-                <div className="data mt-1">
-                  <h2
-                    style={{
-                      fontSize: "16px",
-                      color: "#12ac4c",
-                      lineHeight: "22px",
-                    }}
-                  >
-                    BỘT CHANH GIA VỊ CHAVI
-                  </h2>
-                  <span>₫106,000.00</span>
-                </div>
-              </div>
-            </div>
+            )}
+            <div className="text-center text-danger fs-5" id="list-empty"></div>
           </div>
         </div>
       </div>

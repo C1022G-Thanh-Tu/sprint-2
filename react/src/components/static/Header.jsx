@@ -136,7 +136,7 @@ function Header() {
           </div>
           <NavLink to="/cart" className="navbar-brand">
             <i className="bi bi-cart"></i>
-            <span class="cart-badge">3</span>
+            <span className="cart-badge">3</span>
           </NavLink>
           {!name ? (
             <NavLink
@@ -147,7 +147,7 @@ function Header() {
               Đăng nhập
             </NavLink>
           ) : (
-            <div class="dropdown">
+            <div className="dropdown">
               <a
                 className="dropdown-toggle fs-5"
                 type="button"
@@ -156,11 +156,11 @@ function Header() {
               >
                 {name}
               </a>
-              <ul class="dropdown-menu">
+              <ul className="dropdown-menu">
                 <li>
                   <a
                     onClick={handleLogout}
-                    class="dropdown-item"
+                    className="dropdown-item"
                     href="#"
                   >
                     Đăng xuất

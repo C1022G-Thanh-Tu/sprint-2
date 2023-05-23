@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-public class UserPrinciple implements UserDetails {
+public class UserPrinciple implements OAuth2User, UserDetails {
     private Integer id;
     private String name;
     private String username;
@@ -18,16 +20,23 @@ public class UserPrinciple implements UserDetails {
     @JsonIgnore
     private String password;
     private String avatar;
+    private Map<String, Object> attributes;
 
     private Collection<? extends GrantedAuthority> roles;
 
-    public UserPrinciple(Integer id, String name, String userName, String email, String password, List<GrantedAuthority> authorities) {
+    public UserPrinciple(Integer id, String name, String userName, String email,
+                         String password, List<GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.username = userName;
         this.email = email;
         this.password = password;
         this.roles = authorities;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
     }
 
     @Override
@@ -50,6 +59,11 @@ public class UserPrinciple implements UserDetails {
                 authorities
         );
     }
+    public static UserPrinciple create(User user, Map<String, Object> attributes) {
+        UserPrinciple userPrincipal = UserPrinciple.build(user);
+        userPrincipal.setAttributes(attributes);
+        return userPrincipal;
+    }
 
     public Integer getId() {
         return id;
@@ -65,10 +79,6 @@ public class UserPrinciple implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public Collection<? extends GrantedAuthority> getRoles() {
@@ -89,10 +99,6 @@ public class UserPrinciple implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getAvatar() {
-        return avatar;
     }
 
     public String getName() {
@@ -127,6 +133,9 @@ public class UserPrinciple implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 
 }

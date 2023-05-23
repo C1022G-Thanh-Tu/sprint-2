@@ -198,9 +198,9 @@ html {
 
 .action-button {
   position: absolute;
-  width: 101%;
+  width: 102%;
   bottom: 0;
-  transform: translateY(-61px);
+  transform: translate(-3px,-58px);
   left: 0;
   opacity: 0;
   visibility: hidden;
@@ -213,7 +213,7 @@ html {
 }
 
 .product-image img {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .product-data img {
@@ -254,9 +254,38 @@ html {
   position: absolute;
   background-color: red;
   top: 0;
-  transform: translate(-44%,160%);
+  transform: translate(-44%, 160%);
   color: white;
   font-size: 12px;
   padding: 1px 6px;
   border-radius: 50%;
+}
+
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+  font-size: 1rem;
+  line-height: 2.15;
+  padding-left: 0.75em;
+  padding-right: 0.75em;
+}
+
+.card-registration .select-arrow {
+  top: 13px;
+}
+
+.bg-grey {
+  background-color: #eae8e8;
+}
+
+@media (min-width: 992px) {
+  .card-registration-2 .bg-grey {
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+}
+
+@media (max-width: 991px) {
+  .card-registration-2 .bg-grey {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
 }

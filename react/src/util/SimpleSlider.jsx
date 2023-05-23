@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function SimpleSlider() {
+export default function SimpleSlider(props) {
   const [nav1, setNav1] = useState(null);
   const [nav2, setNav2] = useState(null);
   const slider1 = useRef(null);
@@ -17,27 +17,11 @@ export default function SimpleSlider() {
   return (
     <div>
       <Slider asNavFor={nav2} ref={slider1}>
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi.jpg"
-            alt=""
-            width={"90%"}
-          />
-        </div>
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi-2.jpg"
-            alt=""
-            width={"90%"}
-          />
-        </div>
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi-1-1.png"
-            alt=""
-            width={"90%"}
-          />
-        </div>
+        {props.imgList.map((img, index) => (
+          <div key={index}>
+            <img src={img.url} alt="" width={"90%"} style={{height:'400px'}} />
+          </div>
+        ))}
       </Slider>
       <h4>Hình ảnh khác</h4>
       <Slider
@@ -47,27 +31,11 @@ export default function SimpleSlider() {
         swipeToSlide={true}
         focusOnSelect={true}
       >
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi-100x100.jpg"
-            alt=""
-            width={'60%'}
-          />
-        </div>
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi-2-100x100.jpg"
-            alt=""
-            width={'60%'}
-          />
-        </div>
-        <div>
-          <img
-            src="https://chanhviet.com/wp-content/uploads/2019/11/bot-chanh-chavi-1-1-100x100.png"
-            alt=""
-            width={'60%'}
-          />
-        </div>
+        {props.imgList.map((img, index) => (
+          <div key={index}>
+            <img src={img.url} alt="" width={"60%"} style={{height: '90px'}}/>
+          </div>
+        ))}
       </Slider>
     </div>
   );
