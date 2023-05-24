@@ -2,6 +2,7 @@ import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import productService from "../../service/productService";
+import carDetailService from "../../service/carDetailService"
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -11,6 +12,14 @@ function Product() {
     page: 0,
     name: "",
   });
+
+  const handleAddCartDetail = async (productId, productPrice) => {
+    await carDetailService.save({
+      quantity: 1,
+      productDTO: {id: productId},
+      total: productPrice
+    })
+  }
 
   const handlePageClick = () => {
     setProductFilter((prev) => ({ ...prev, page: prev.page + 1 }));
@@ -94,7 +103,7 @@ function Product() {
 
             <div className="holder row">
               {products.map((product, index) => (
-                <div className="product-data col-4 text-center" key={index}>
+                <div className="product-data col-4 text-center mb-3" key={index}>
                   <div className="product-image">
                     <img
                       src={product.productImgDTOS[0].url}
@@ -119,6 +128,7 @@ function Product() {
                       <button
                         className="button-cart"
                         style={{ border: "none", background: "none" }}
+                        onClick={() => handleAddCartDetail(product.id, product.price)}
                       >
                         Thêm vào giỏ
                       </button>

@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/product")
 @CrossOrigin("*")
 public class ProductRestController {
+    StringBuilder stringBuilder = new StringBuilder();
     @Autowired
     private IProductService productService;
     @GetMapping("")
     public ResponseEntity<Page<ProductDTO>> findProductByName (
             @RequestParam(required = false, defaultValue = "") String name,
-            @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC,size = 3) Pageable pageable ) {
+            @PageableDefault(sort = {"id"},direction = Sort.Direction.DESC,size = 6) Pageable pageable ) {
         Page<ProductDTO> productDTOS = productService.findByName(pageable, name);
         if (productDTOS.isEmpty()) {
             return new ResponseEntity<>(productDTOS, HttpStatus.NOT_FOUND);

@@ -2,13 +2,16 @@ package com.example.api.dto.cart;
 
 import com.example.api.dto.product.ProductDTO;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
 public class CartDetailDTO {
     private Integer id;
-    private boolean isDelete;
+    @PositiveOrZero(message = "Tổng tiền phải là số dương")
     private Double total;
+    @Positive(message = "Hãy chọn số lượng (ít nhất 1 sản phẩm)")
     private Integer quantity;
     private ProductDTO productDTO;
-    private CartDTO cartDTO;
 
     public CartDetailDTO() {
     }
@@ -19,14 +22,6 @@ public class CartDetailDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public boolean isDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(boolean delete) {
-        isDelete = delete;
     }
 
     public Double getTotal() {
@@ -51,13 +46,5 @@ public class CartDetailDTO {
 
     public void setProductDTO(ProductDTO productDTO) {
         this.productDTO = productDTO;
-    }
-
-    public CartDTO getCartDTO() {
-        return cartDTO;
-    }
-
-    public void setCartDTO(CartDTO cartDTO) {
-        this.cartDTO = cartDTO;
     }
 }

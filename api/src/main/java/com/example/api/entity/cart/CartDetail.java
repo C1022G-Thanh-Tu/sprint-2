@@ -11,7 +11,7 @@ public class CartDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private boolean isDelete;
+    private boolean isDelete = false;
     private Double total;
     private Integer quantity;
     @ManyToOne

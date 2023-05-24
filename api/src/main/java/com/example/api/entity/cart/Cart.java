@@ -12,7 +12,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String code;
-    private boolean isDelete;
+    private boolean isDelete = false;
     private Double total;
     private String customerName;
     @OneToMany (mappedBy = "cart")
