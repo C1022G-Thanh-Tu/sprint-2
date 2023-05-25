@@ -45,19 +45,24 @@ public class CartDetailService implements ICartDetailService {
         BeanUtils.copyProperties(cartDetailDTO.getProductDTO(), cartDetail.getProduct());
         BeanUtils.copyProperties(cartDetailDTO, cartDetail);
         cartDetail.setCart(cartRepository.findTheLastCart());
-        if (cartDetail.getQuantity() - product.getQuantity() < 0) {
+        if (product.getQuantity() - cartDetail.getQuantity() < 0) {
             return "Số lượng không đủ";
         }
-        product.setQuantity(cartDetail.getQuantity() - product.getQuantity());
+        product.setQuantity(product.getQuantity() - cartDetail.getQuantity());
         productRepository.save(product);
         List<CartDetail> cartDetails = cartDetailRepository.findAll();
         if (cartDetails.isEmpty()) {
             cartDetailRepository.save(cartDetail);
+            count++;
             return "";
         }
-
-
-
+        for (int i = cartDetails.size() - 1; i >= 0; i--) {
+            if (count != 0 && cartDetails.get(i).getProduct().equals(product)  && !cartDetails.get(i).isDelete()) {
+                cartDetails.get(i).setQuantity(cartDetails.get(i).getQuantity() + cartDetailDTO.getQuantity());
+                cartDetailRepository.save(cartDetails.get(i));
+                return "";
+            }
+        }
         cartDetailRepository.save(cartDetail);
         count++;
         return "";
@@ -66,7 +71,17 @@ public class CartDetailService implements ICartDetailService {
     @Override
     public String update(Integer id, Integer quantity) {
         CartDetail cartDetail = cartDetailRepository.findById(id).get();
-        cartDetail.setQuantity(quantity);
+        Product product = productRepository.findById(cartDetail.getProduct().getId()).get();
+        if (product.getQuantity() < quantity) {
+            return "Số lượng không đủ";
+        }
+        product.setQuantity(product.getQuantity() - quantity);
+        productRepository.save(product);
+        if (cartDetail.getQuantity() + quantity <= 0) {
+            delete(id);
+            return "Lỗi";
+        }
+        cartDetail.setQuantity(cartDetail.getQuantity() + quantity);
         cartDetailRepository.save(cartDetail);
         return "";
     }
@@ -75,6 +90,9 @@ public class CartDetailService implements ICartDetailService {
     public void delete(int id) {
         CartDetail cartDetail = cartDetailRepository.findById(id).get();
         cartDetail.setDelete(true);
+        Product product = productRepository.findById(cartDetail.getProduct().getId()).get();
+        product.setQuantity(product.getQuantity() + cartDetail.getQuantity());
+        productRepository.save(product);
         cartDetailRepository.save(cartDetail);
     }
 

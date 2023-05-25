@@ -1,26 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import carDetailService from "../../service/carDetailService";
+import cartDetailService from "../../service/carDetailService";
 import ModalDeleteCartDetail from "../../util/ModalDeleteCartDetail";
 import Swal from "sweetalert2";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import { useDispatch, useSelector } from "react-redux";
+// import {showListAction} from "../../redux/action/showList"
 
 function ShoppingCart() {
   const [cartDetails, setCartDetails] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
+  const [total, setTotal] = useState(0);
   const [deletedObject, setDeletedObject] = useState({
     deletedId: "",
     deletedName: "",
   });
 
-  const handleUpdateQuantity = async (id, e) => {
+  // const dispatch = useDispatch();
+  // const cartDetails = useSelector(state => state.carDetails)
+
+  const handleIncreaseQuantity = async (id) => {
     try {
-      await carDetailService.update(id, +e.target.value)
+      await cartDetailService.update(id, 1);
       let newIsUpdate = { ...isUpdate };
       setIsUpdate(newIsUpdate);
     } catch (error) {
       console.warn(error);
+      const errMsg = error.response.data;
+      if (errMsg === "Số lượng không đủ") {
+        toast.warn("Số lượng sản phẩm không đủ");
+      }
     }
-  }
+  };
+
+  const handleDecreaseQuantity = async (id) => {
+    try {
+      await cartDetailService.update(id, -1);
+      let newIsUpdate = { ...isUpdate };
+      setIsUpdate(newIsUpdate);
+    } catch (error) {
+      console.warn(error);
+      const errMsg = error.response.data;
+      if (errMsg === "Lỗi") {
+        let newIsUpdate = { ...isUpdate };
+        setIsUpdate(newIsUpdate);
+      }
+    }
+  };
 
   const handleTransferInfo = (deletedObject) => {
     setDeletedObject((prev) => ({ ...prev, ...deletedObject }));
@@ -28,7 +55,7 @@ function ShoppingCart() {
 
   const handleDelete = async () => {
     try {
-      await carDetailService.remove(deletedObject.deletedId);
+      await cartDetailService.remove(deletedObject.deletedId);
       let newIsUpdate = { ...isUpdate };
       setIsUpdate(newIsUpdate);
     } catch (error) {
@@ -43,12 +70,28 @@ function ShoppingCart() {
   };
 
   useEffect(() => {
+    const calculateTotal = () => {
+      if (cartDetails.length !== 0) {
+        let sum = cartDetails.reduce((acc, cartDetail) => {
+          return acc + cartDetail.quantity * cartDetail.productDTO.price;
+        }, 0);
+        setTotal(sum);
+      }
+    };
+    calculateTotal();
+  }, [cartDetails]);
+
+  useEffect(() => {
     const getCartDetails = async () => {
-      const cartDetailsResponse = await carDetailService.findAll();
+      const cartDetailsResponse = await cartDetailService.findAll();
       setCartDetails(cartDetailsResponse.data);
     };
     getCartDetails();
   }, [isUpdate]);
+
+  // useEffect(() => {
+  //   dispatch(showListAction())
+  // }, [])
 
   return (
     <>
@@ -67,6 +110,14 @@ function ShoppingCart() {
                   <div className="row g-0">
                     <div className="col-lg-8">
                       <div className="p-5">
+                        <div className="pb-3">
+                          <h6 className="mb-0">
+                            <Link to={"/product"} className="text-body">
+                              <i className="bi bi-arrow-left me-2" />
+                              Tiếp tục mua sắm
+                            </Link>
+                          </h6>
+                        </div>
                         <div className="d-flex justify-content-between align-items-center mb-5">
                           <h1 className="fw-bold mb-0 text-black">
                             Giỏ hàng của bạn
@@ -106,20 +157,41 @@ function ShoppingCart() {
                                       }
                                     </h6>
                                     <h6 className="text-black mb-0">
-                                      {cartDetail.productDTO.name}
+                                      <Link
+                                        to={`/product-detail/${cartDetail.productDTO.id}`}
+                                        style={{ textDecoration: "none" }}
+                                        className="text-black"
+                                      >
+                                        {cartDetail.productDTO.name}
+                                      </Link>
                                     </h6>
                                   </div>
-                                  <div className="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                    <button className="btn btn-link px-2"></button>
-                                    <input
-                                      id="form1"
-                                      name="quantity"
-                                      type="number"
-                                      className="form-control form-control-sm"
-                                      value={cartDetail.quantity}
-                                      onChange={(e) => handleUpdateQuantity(cartDetail.id, e)}
-                                    />
-                                    <button className="btn btn-link px-2"></button>
+                                  <div className="col-md-3 col-lg-3 col-xl-2 d-flex justify-content-around">
+                                    <button
+                                      style={{
+                                        border: "1px solid #12ac4c",
+                                        background: "none",
+                                      }}
+                                      onClick={() =>
+                                        handleDecreaseQuantity(cartDetail.id)
+                                      }
+                                    >
+                                      <i className="bi bi-dash-lg pe-1 ps-1"></i>
+                                    </button>
+                                    <span id={`quantity${cartDetail.id}`}>
+                                      {cartDetail.quantity}
+                                    </span>
+                                    <button
+                                      style={{
+                                        border: "1px solid rgba(0, 0, 0, 0.5)",
+                                        background: "#12ac4c",
+                                      }}
+                                      onClick={() =>
+                                        handleIncreaseQuantity(cartDetail.id)
+                                      }
+                                    >
+                                      <i className="bi bi-plus-lg text-white pe-1 ps-1"></i>
+                                    </button>
                                   </div>
                                   <div className="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <h6 className="mb-0">
@@ -154,14 +226,6 @@ function ShoppingCart() {
                             ))}
                           </>
                         )}
-                        <div className="pt-5">
-                          <h6 className="mb-0">
-                            <Link to={"/product"} className="text-body">
-                              <i className="bi bi-arrow-left me-2" />
-                              Back to shop
-                            </Link>
-                          </h6>
-                        </div>
                       </div>
                     </div>
                     <div className="col-lg-4 bg-grey">
@@ -174,9 +238,14 @@ function ShoppingCart() {
                           <h5 className="text-uppercase">
                             {cartDetails.length} sản phẩm
                           </h5>
-                          <h5>€ 132.00</h5>
+                          <h5>
+                            {total.toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </h5>
                         </div>
-                        <h5 className="text-uppercase mb-3">Shipping</h5>
+                        <h5 className="text-uppercase mb-3">Giao hàng</h5>
                         <div className="mb-4 pb-2">
                           <select className="form-control select-input placeholder-active active">
                             <option value={1}>Standard-Delivery- €5.00</option>
@@ -201,7 +270,12 @@ function ShoppingCart() {
                         <hr className="my-4" />
                         <div className="d-flex justify-content-between mb-5">
                           <h5 className="text-uppercase">Tổng tiền</h5>
-                          <h5>€ 137.00</h5>
+                          <h5>
+                            {total.toLocaleString("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            })}
+                          </h5>
                         </div>
                         <button
                           type="button"
@@ -219,6 +293,7 @@ function ShoppingCart() {
           </div>
         </div>
       </section>
+      <ToastContainer />
 
       <ModalDeleteCartDetail
         deletedName={deletedObject.deletedName}

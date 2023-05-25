@@ -2,7 +2,9 @@ import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import productService from "../../service/productService";
-import carDetailService from "../../service/carDetailService"
+import carDetailService from "../../service/carDetailService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -14,12 +16,21 @@ function Product() {
   });
 
   const handleAddCartDetail = async (productId, productPrice) => {
-    await carDetailService.save({
-      quantity: 1,
-      productDTO: {id: productId},
-      total: productPrice
-    })
-  }
+    try {
+      await carDetailService.save({
+        quantity: 1,
+        productDTO: { id: productId },
+        total: productPrice,
+      });
+      toast.success("Thêm vào giỏ thành công");
+    } catch (error) {
+      console.warn(error);
+      const errMsg = error.response.data;
+      if (errMsg === "Số lượng không đủ") {
+        toast.warn("Số lượng sản phẩm không đủ");
+      }
+    }
+  };
 
   const handlePageClick = () => {
     setProductFilter((prev) => ({ ...prev, page: prev.page + 1 }));
@@ -32,7 +43,7 @@ function Product() {
         const productsResponse = await productService.findByName(productFilter);
         if (isAppend) {
           setProducts((prev) => [...prev, ...productsResponse.data.content]);
-          setIsAppend(false)
+          setIsAppend(false);
         } else {
           setProducts(productsResponse.data.content);
         }
@@ -103,7 +114,10 @@ function Product() {
 
             <div className="holder row">
               {products.map((product, index) => (
-                <div className="product-data col-4 text-center mb-3" key={index}>
+                <div
+                  className="product-data col-4 text-center mb-3"
+                  key={index}
+                >
                   <div className="product-image">
                     <img
                       src={product.productImgDTOS[0].url}
@@ -128,7 +142,9 @@ function Product() {
                       <button
                         className="button-cart"
                         style={{ border: "none", background: "none" }}
-                        onClick={() => handleAddCartDetail(product.id, product.price)}
+                        onClick={() =>
+                          handleAddCartDetail(product.id, product.price)
+                        }
                       >
                         Thêm vào giỏ
                       </button>
@@ -142,7 +158,12 @@ function Product() {
                         lineHeight: "22px",
                       }}
                     >
-                      {product.name}
+                      {product.name}{" "}
+                      {product.quantity <= 10 ? (
+                        <span className="text-dark">(Còn {product.quantity} sản phẩm)</span>
+                      ) : (
+                        <></>
+                      )}
                     </h2>
                     <span>
                       <b>
@@ -172,6 +193,7 @@ function Product() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

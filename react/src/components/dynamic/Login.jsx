@@ -135,6 +135,7 @@ function Login() {
                               "roles",
                               rs.data.roles[0].authority
                             );
+                            localStorage.setItem("username", rs.data.userName)
                             Swal.fire({
                               icon: "success",
                               title: "Đăng nhập thành công",

@@ -2,11 +2,36 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SimpleSlider from "../../util/SimpleSlider";
 import productService from "../../service/productService";
+import carDetailService from "../../service/carDetailService";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProductDetail() {
   const [product, setProduct] = useState();
   const [products, setProducts] = useState([]);
+  const [quantity, setQuantity] = useState(0);
   const param = useParams();
+
+  const handleChangeQuantity = (e) => {
+    setQuantity(+e.target.value);
+  };
+
+  const handleAddCartDetail = async (productId, productPrice) => {
+    try {
+      await carDetailService.save({
+        quantity: quantity,
+        productDTO: { id: productId },
+        total: productPrice,
+      });
+      toast.success("Thêm mới thành công");
+    } catch (error) {
+      console.warn(error);
+      const errMsg = error.response.data;
+      if (errMsg === "Số lượng không đủ") {
+        toast.warn("Số lượng sản phẩm không đủ");
+      }
+    }
+  };
 
   useEffect(() => {
     const getProducts = async () => {
@@ -50,9 +75,7 @@ function ProductDetail() {
                   <SimpleSlider imgList={product.productImgDTOS} />
                 </div>
                 <div className="col-6 p-0">
-                  <h1
-                    style={{ fontSize: "24px", color: "#12ac4c" }}
-                  >
+                  <h1 style={{ fontSize: "24px", color: "#12ac4c" }}>
                     {product.name}
                   </h1>
                   <p className="price fs-5">
@@ -63,9 +86,49 @@ function ProductDetail() {
                       })}
                     </b>
                   </p>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: product.description }}
-                  ></div>
+                  <div className="description" style={{ textAlign: "justify" }}>
+                    <div
+                      dangerouslySetInnerHTML={{ __html: product.description }}
+                    ></div>
+                    <div className="d-flex align-items-center mb-3 gap-2">
+                      <input
+                        type="number"
+                        style={{ width: 50 }}
+                        min={0}
+                        value={quantity}
+                        onChange={(e) => handleChangeQuantity(e)}
+                      />
+                      <button
+                        className="btn btn-success rounded-pill"
+                        onClick={() =>
+                          handleAddCartDetail(product.id, product.price)
+                        }
+                      >
+                        Thêm vào giỏ hàng
+                      </button>
+                      {product.quantity <= 10 ? (
+                        <span>(Còn {product.quantity} sản phẩm)</span>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                    <p className="m-0">
+                      <b>Thương hiệu:</b> CHAVI Việt Nam
+                    </p>
+                    <p>
+                      <b>Xuất xứ:</b> Tỉnh Long An – Việt Nam.
+                    </p>
+                    <h2 style={{ fontSize: 24, color: "#12ac4c" }}>
+                      Bảo quản sản phẩm
+                    </h2>
+                    <ul style={{ marginLeft: "-32px" }} className="mt-1">
+                      <li>
+                        Để sản phẩm nơi khô ráo thoáng mát, tránh để gần khu vực
+                        có nhiệt độ cao.
+                      </li>
+                      <li>Sau khi sử dụng đậy kín, có thể để trong tủ lạnh.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -131,6 +194,7 @@ function ProductDetail() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

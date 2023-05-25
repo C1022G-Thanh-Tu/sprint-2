@@ -29,8 +29,12 @@ public class CartDetailRestController {
     public ResponseEntity<?> createInvoiceDetail(@Valid @RequestBody CartDetailDTO cartDetailDTO,
                                                  BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            cartDetailService.save(cartDetailDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            String msg = cartDetailService.save(cartDetailDTO);
+            if (!msg.equals("")) {
+                return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }
         } else {
             Map<String, String> map = new LinkedHashMap<>();
             List<FieldError> errors = bindingResult.getFieldErrors();
@@ -57,7 +61,11 @@ public class CartDetailRestController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        cartDetailService.update(id, quantity);
-        return new ResponseEntity<>(HttpStatus.OK);
+        String msg = cartDetailService.update(id, quantity);
+        if (!msg.equals("")) {
+            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }
