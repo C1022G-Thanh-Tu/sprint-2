@@ -23,7 +23,7 @@ public class EmailService implements IEmailService{
     @Override
     public void sendResetPasswordEmail(String email, String otp) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper message = null;
+        MimeMessageHelper message;
 
         try {
             message = new MimeMessageHelper(mimeMessage, true);

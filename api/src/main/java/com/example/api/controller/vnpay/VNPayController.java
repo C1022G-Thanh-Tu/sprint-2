@@ -3,7 +3,10 @@ package com.example.api.controller.vnpay;
 import com.example.api.config.VNPayConfig;
 import com.example.api.dto.payment.PaymentReqDTO;
 import com.example.api.dto.payment.PaymentResDTO;
+import com.example.api.dto.payment.PaymentSendEmailDTO;
 import com.example.api.dto.payment.TransactionStatusDTO;
+import com.example.api.service.vnpay.impl.VNPayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,8 @@ import java.util.*;
 @RequestMapping("/api/payment")
 @CrossOrigin("*")
 public class VNPayController {
+    @Autowired
+    private VNPayService vnPayService;
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment (@RequestBody PaymentReqDTO paymentReqDTO) throws UnsupportedEncodingException {
 //        String orderType = req.getParameter("ordertype");
@@ -93,6 +98,15 @@ public class VNPayController {
         paymentResDTO.setMsg("Thành công");
         paymentResDTO.setUrl(paymentUrl);
         return ResponseEntity.status(HttpStatus.OK).body(paymentResDTO);
+    }
+
+    @PostMapping("/send-email")
+    public ResponseEntity<?> sendEmail (@RequestBody PaymentSendEmailDTO paymentSendEmailDTO) {
+        if (paymentSendEmailDTO.getEmail() == null) {
+            return new ResponseEntity<>("Tài khoản này chưa có email", HttpStatus.BAD_REQUEST);
+        }
+        vnPayService.sendEmail(paymentSendEmailDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/payment-info")

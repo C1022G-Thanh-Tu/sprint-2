@@ -120,6 +120,7 @@ function Login() {
                             const rs = await loginService.login(value);
                             localStorage.setItem("token", rs.data.token);
                             localStorage.setItem("name", rs.data.name);
+                            localStorage.setItem("email", rs.data.email)
                             localStorage.setItem(
                               "roles",
                               rs.data.roles[0].authority

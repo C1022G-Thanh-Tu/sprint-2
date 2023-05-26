@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import queryString from "query-string";
 import { format } from "date-fns";
 import cartService from "../../service/cartService";
+import paymentService from "../../service/paymentService";
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 
@@ -17,13 +18,28 @@ function PaymentResult() {
   });
 
   const customerName = localStorage.getItem("name");
+  const email = localStorage.getItem("email");
   const navigate = useNavigate();
   const componentBRef = useRef(null);
+  const url = window.location.href;
 
   const handlePrint = useReactToPrint({
     content: () => componentBRef.current,
     pageStyle: "@page { size: A4; margin: 0; }",
   });
+
+  const handleSendEmail = async () => {
+    try {
+      await paymentService.sendEmail({
+        email,
+        customerName,
+        code: paymentInfo.vnp_TransactionNo,
+        total: paymentInfo.vnp_Amount,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 
   const handleUpdateCart = async () => {
     try {
@@ -33,6 +49,7 @@ function PaymentResult() {
         customerName,
         paymentDate: paymentInfo.vnp_PayDate,
       });
+      handleSendEmail();
       navigate("/product");
     } catch (error) {
       console.warn(error);
@@ -55,7 +72,6 @@ function PaymentResult() {
   };
 
   useEffect(() => {
-    const url = window.location.href;
     const parsed = queryString.parse(url);
     const str = "http://localhost:3000/payment-info?vnp_Amount";
     const dateTimeString = parsed.vnp_PayDate;
@@ -69,7 +85,12 @@ function PaymentResult() {
       vnp_PayDate: formattedDateTime,
       vnp_TransactionNo: parsed.vnp_TransactionNo,
     });
-  }, [customerName]);
+  }, [customerName, url]);
+
+  if (!url) {
+    window.location.href =
+      "https://sandbox.vnpayment.vn/paymentv2/Payment/Error.html?backtoken=e507d3062e1048c39d8f3fa82c2f1a26";
+  }
 
   return (
     <>
@@ -134,18 +155,17 @@ function PaymentResult() {
           </table>
         </div>
         <div className="d-flex justify-content-center gap-3 ">
-        <button
-          className="btn btn-secondary"
-          onClick={() => handleUpdateCart()}
-        >
-          Tiếp tục mua sắm
-        </button>
-        <button className="btn btn-primary" onClick={() => handlePrint()}>
-          <i className="bi bi-printer-fill"></i> In hóa đơn
-        </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => handleUpdateCart()}
+          >
+            Tiếp tục mua sắm
+          </button>
+          <button className="btn btn-primary" onClick={() => handlePrint()}>
+            <i className="bi bi-printer-fill"></i> In hóa đơn
+          </button>
+        </div>
       </div>
-      </div>
-
     </>
   );
 }
