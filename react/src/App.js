@@ -12,6 +12,9 @@ import ShoppingCart from "./components/dynamic/ShoppingCart";
 import ScrollToTop from "./util/ScrollToTop";
 import Contact from "./components/static/Contact";
 import Register from "./components/dynamic/Register"
+import PaymentResult from "./components/dynamic/PaymentResult";
+import CartDetails from "./components/dynamic/CartDetails";
+import ChangePassword from "./components/dynamic/ChangePassword";
 
 function App() {
   return (
@@ -26,7 +29,10 @@ function App() {
             <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/cart-detail" element={<CartDetails />} />
+            <Route path="/change-password" element={<ChangePassword />} />
           </Route>
+          <Route path="/payment-info" element={<PaymentResult />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
         </Routes>

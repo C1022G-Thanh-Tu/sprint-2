@@ -12,6 +12,7 @@ public class CartDetailDTO {
     @Positive(message = "Hãy chọn số lượng (ít nhất 1 sản phẩm)")
     private Integer quantity;
     private ProductDTO productDTO;
+    private CartDTO cartDTO;
 
     public CartDetailDTO() {
     }
@@ -46,5 +47,13 @@ public class CartDetailDTO {
 
     public void setProductDTO(ProductDTO productDTO) {
         this.productDTO = productDTO;
+    }
+
+    public CartDTO getCartDTO() {
+        return cartDTO;
+    }
+
+    public void setCartDTO(CartDTO cartDTO) {
+        this.cartDTO = cartDTO;
     }
 }

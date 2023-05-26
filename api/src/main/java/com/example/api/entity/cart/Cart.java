@@ -15,6 +15,7 @@ public class Cart {
     private boolean isDelete = false;
     private Double total;
     private String customerName;
+    private String paymentDate;
     @OneToMany (mappedBy = "cart")
     @JsonManagedReference
     private Set<CartDetail> cartDetails;
@@ -68,5 +69,13 @@ public class Cart {
 
     public void setCartDetails(Set<CartDetail> cartDetails) {
         this.cartDetails = cartDetails;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
     }
 }

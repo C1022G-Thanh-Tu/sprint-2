@@ -4,6 +4,10 @@ const findAll = () => {
     return request.get("/cart-detail")
 }
 
+const listTotalALL = (page) => {
+    return request.get(`/cart-detail/list?page=${page?page:0}`)
+}
+
 const save = (cartDetail) => {
     return request.post(`/cart-detail`, {...cartDetail})
 }
@@ -20,7 +24,8 @@ const cartDetailService = {
     findAll,
     save,
     remove,
-    update
+    update,
+    listTotalALL
 }
 
 export default cartDetailService

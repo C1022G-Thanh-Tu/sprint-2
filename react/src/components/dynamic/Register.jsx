@@ -10,8 +10,12 @@ function Register() {
   const navigate = useNavigate();
   const getMinDate = () => {
     const today = new Date();
-    return new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
-  }
+    return new Date(
+      today.getFullYear() - 16,
+      today.getMonth(),
+      today.getDate()
+    );
+  };
   useEffect(() => {
     document.title = "Đăng Ký";
   }, []);
@@ -30,10 +34,16 @@ function Register() {
               <div className="col-12 col-lg-9 col-xl-7">
                 <div
                   className="card shadow-2-strong card-registration"
-                  style={{ borderRadius: 15, background: 'none', border: '10px solid' }}
+                  style={{
+                    borderRadius: 15,
+                    background: "none",
+                    border: "10px solid",
+                  }}
                 >
                   <div className="card-body p-4 p-md-5">
-                    <h3 className="mb-4 pb-2 pb-md-0 mb-md-5">Đăng ký tài khoản</h3>
+                    <h3 className="mb-4 pb-2 pb-md-0 mb-md-5">
+                      Đăng ký tài khoản
+                    </h3>
                     <Formik
                       initialValues={{
                         name: "",
@@ -68,9 +78,9 @@ function Register() {
                         address: Yup.date().required(
                           "Trường này bắt buộc nhập"
                         ),
-                        dateOfBirth: Yup.date().required(
-                          "Trường này bắt buộc nhập"
-                        ).max(getMinDate(), 'Bạn phải từ 16 tuổi trở lên'),
+                        dateOfBirth: Yup.date()
+                          .required("Trường này bắt buộc nhập")
+                          .max(getMinDate(), "Bạn phải từ 16 tuổi trở lên"),
                         username: Yup.string()
                           .required("Trường này bắt buộc nhập")
                           .matches(
@@ -91,7 +101,8 @@ function Register() {
                               showConfirmButton: false,
                               timer: 1500,
                             });
-                            document.getElementById("username-err").innerText = "";
+                            document.getElementById("username-err").innerText =
+                              "";
                             document.getElementById("email-err").innerText = "";
                             navigate("/login");
                           } catch (error) {
@@ -133,7 +144,8 @@ function Register() {
                           <div className="col-md-6 mb-4">
                             <div className="form-outline">
                               <label className="form-label" htmlFor="username">
-                                Tên đăng ký <span className="text-danger">*</span>
+                                Tên đăng ký{" "}
+                                <span className="text-danger">*</span>
                               </label>
                               <Field
                                 type="text"
@@ -161,7 +173,8 @@ function Register() {
                                   htmlFor="password"
                                   className="form-label"
                                 >
-                                  Mật khẩu <span className="text-danger">*</span>
+                                  Mật khẩu{" "}
+                                  <span className="text-danger">*</span>
                                 </label>
                               </div>
                               <div className="position-relative">
@@ -188,12 +201,12 @@ function Register() {
                                     className="bi bi-eye-fill position-absolute top-50 translate-middle-y me-2 end-0"
                                   ></i>
                                 )}
-                                <ErrorMessage
-                                  name="password"
-                                  component="div"
-                                  className="text-danger"
-                                />
                               </div>
+                              <ErrorMessage
+                                name="password"
+                                component="div"
+                                className="text-danger"
+                              />
                             </div>
                           </div>
                           <div className="col-md-6 mb-4">
@@ -259,7 +272,8 @@ function Register() {
                                 className="form-label"
                                 htmlFor="phoneNumber"
                               >
-                                Số điện thoại <span className="text-danger">*</span>
+                                Số điện thoại{" "}
+                                <span className="text-danger">*</span>
                               </label>
                               <Field
                                 type="tel"
@@ -317,10 +331,13 @@ function Register() {
                           </div>
                         </div>
                         <div className="mt-4">
-                          <button className="btn btn-primary me-3" type="submit">
+                          <button
+                            className="btn btn-primary me-3"
+                            type="submit"
+                          >
                             Đăng ký
                           </button>
-                          <Link className="btn btn-secondary" to={'/login'}>
+                          <Link className="btn btn-secondary" to={"/login"}>
                             Hủy
                           </Link>
                         </div>

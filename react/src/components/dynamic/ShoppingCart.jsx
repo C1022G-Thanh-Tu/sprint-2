@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import cartDetailService from "../../service/carDetailService";
 import ModalDeleteCartDetail from "../../util/ModalDeleteCartDetail";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import paymentService from "../../service/paymentService"
 // import { useDispatch, useSelector } from "react-redux";
 // import {showListAction} from "../../redux/action/showList"
 
@@ -17,8 +18,33 @@ function ShoppingCart() {
     deletedName: "",
   });
 
+  const navigate = useNavigate()
+  const name = localStorage.getItem("name");
+  const role = localStorage.getItem("roles")
   // const dispatch = useDispatch();
   // const cartDetails = useSelector(state => state.carDetails)
+
+  const handlePayment = async () => {
+    if (!role) {
+      Swal.fire({
+        title: 'Thông báo',
+        text: "Bạn phải đăng nhập để thực hiện thanh toán",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        // cancelButtonColor: '#d33',
+        confirmButtonText: 'Đăng nhập'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login")
+        }
+      })
+    } else {
+      const res = await paymentService.pay({amount: total})
+      window.location.href = res.data.url
+    }
+
+  }
 
   const handleIncreaseQuantity = async (id) => {
     try {
@@ -146,7 +172,7 @@ function ShoppingCart() {
                                           .url
                                       }
                                       className="img-fluid rounded-3"
-                                      alt="Cotton T-shirt"
+                                      alt="..."
                                     />
                                   </div>
                                   <div className="col-md-3 col-lg-3 col-xl-3">
@@ -238,34 +264,14 @@ function ShoppingCart() {
                           <h5 className="text-uppercase">
                             {cartDetails.length} sản phẩm
                           </h5>
-                          <h5>
-                            {total.toLocaleString("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            })}
-                          </h5>
                         </div>
-                        <h5 className="text-uppercase mb-3">Giao hàng</h5>
-                        <div className="mb-4 pb-2">
-                          <select className="form-control select-input placeholder-active active">
-                            <option value={1}>Standard-Delivery- €5.00</option>
-                            <option value={2}>Two</option>
-                            <option value={3}>Three</option>
-                            <option value={4}>Four</option>
-                          </select>
+                        <div className="d-flex justify-content-between">
+                          <h5 className="text-uppercase mb-3">Khách hàng: </h5>
+                          <h5 className="mb-4 pb-2">{name}</h5>
                         </div>
-                        <h5 className="text-uppercase mb-3">
-                          <label htmlFor="form3Examplea2">Give code</label>
-                        </h5>
-                        <div className="mb-5">
-                          <div className="form-outline">
-                            <input
-                              type="text"
-                              id="form3Examplea2"
-                              className="form-control form-control-lg"
-                              placeholder="Enter your code"
-                            />
-                          </div>
+                        <div className="d-flex justify-content-between">
+                          <h5 className="text-uppercase mb-3">Phí giao hàng: </h5>
+                          <h5 className="mb-4 pb-2">Miễn phí</h5>
                         </div>
                         <hr className="my-4" />
                         <div className="d-flex justify-content-between mb-5">
@@ -281,6 +287,7 @@ function ShoppingCart() {
                           type="button"
                           className="btn btn-dark btn-block btn-lg w-100"
                           data-mdb-ripple-color="dark"
+                          onClick={() => handlePayment()}
                         >
                           Thanh toán
                         </button>

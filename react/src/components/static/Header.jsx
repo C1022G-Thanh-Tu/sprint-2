@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
@@ -158,11 +158,23 @@ function Header() {
               </a>
               <ul className="dropdown-menu">
                 <li>
-                  <a
-                    onClick={handleLogout}
-                    className="dropdown-item"
-                    href="#"
-                  >
+                  <Link to={"/cart-detail"} className="dropdown-item">
+                    Đơn đã mua
+                  </Link>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
+                <li>
+                  <Link to={"/change-password"} className="dropdown-item">
+                    Đổi mật khẩu
+                  </Link>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
+                <li>
+                  <a onClick={handleLogout} className="dropdown-item" href="#">
                     Đăng xuất
                   </a>
                 </li>

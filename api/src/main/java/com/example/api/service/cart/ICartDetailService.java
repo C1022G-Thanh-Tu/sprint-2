@@ -1,6 +1,8 @@
 package com.example.api.service.cart;
 
 import com.example.api.dto.cart.CartDetailDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,4 +11,6 @@ public interface ICartDetailService {
     String update(Integer id, Integer quantity);
     void delete(int id);
     List<CartDetailDTO> findAll();
+    void deleteAll(int id);
+    Page<CartDetailDTO> findTotalAll(Pageable pageable);
 }

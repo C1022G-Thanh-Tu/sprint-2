@@ -3,6 +3,10 @@ package com.example.api.controller.cart;
 import com.example.api.dto.cart.CartDetailDTO;
 import com.example.api.service.cart.ICartDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -10,6 +14,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +28,22 @@ public class CartDetailRestController {
     @GetMapping("")
     public ResponseEntity<List<CartDetailDTO>> listAll() {
         List<CartDetailDTO> cartDetailDTOS = cartDetailService.findAll();
-        return new ResponseEntity<>(cartDetailDTOS ,HttpStatus.OK);
+        if (cartDetailDTOS.isEmpty()) {
+            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<Page<CartDetailDTO>> listTotalAll(@PageableDefault(sort = {"id"},
+            direction = Sort.Direction.DESC,size = 3)Pageable pageable) {
+        Page<CartDetailDTO> cartDetailDTOS = cartDetailService.findTotalAll(pageable);
+        if (cartDetailDTOS.isEmpty()) {
+            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
+    }
+
     @PostMapping("")
     public ResponseEntity<?> createInvoiceDetail(@Valid @RequestBody CartDetailDTO cartDetailDTO,
                                                  BindingResult bindingResult) {

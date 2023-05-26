@@ -8,6 +8,7 @@ public class CartDTO {
     private boolean isDelete;
     private Double total;
     private String customerName;
+    private String paymentDate;
     private Set<CartDetailDTO> cartDetailDTOS;
 
     public CartDTO() {
@@ -55,6 +56,14 @@ public class CartDTO {
 
     public Set<CartDetailDTO> getCartDetailDTOS() {
         return cartDetailDTOS;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public void setCartDetailDTOS(Set<CartDetailDTO> cartDetailDTOS) {

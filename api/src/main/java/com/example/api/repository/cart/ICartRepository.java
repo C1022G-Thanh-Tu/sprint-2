@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface ICartRepository extends JpaRepository<Cart, Integer> {
     @Query(value = "SELECT * FROM cart ORDER BY id DESC LIMIT 1", nativeQuery = true)
     Cart findTheLastCart();
+
+    Cart findByCodeContaining(String code);
 }

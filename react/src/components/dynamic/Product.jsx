@@ -115,7 +115,7 @@ function Product() {
             <div className="holder row">
               {products.map((product, index) => (
                 <div
-                  className="product-data col-4 text-center mb-3"
+                  className="product-data col-12 col-md-6 col-lg-4 text-center mb-3"
                   key={index}
                 >
                   <div className="product-image">
@@ -178,9 +178,9 @@ function Product() {
               ))}
             </div>
             {productFilter.page + 1 === pageCount ? (
-              <div className="text-center mt-5" id="load-more"></div>
+              <div className="text-center mt-3" id="load-more"></div>
             ) : (
-              <div className="text-center mt-5" id="load-more">
+              <div className="text-center mt-3" id="load-more">
                 <button
                   className="btn btn-secondary"
                   onClick={() => handlePageClick()}
