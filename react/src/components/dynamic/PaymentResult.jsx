@@ -25,7 +25,7 @@ function PaymentResult() {
 
   const handlePrint = useReactToPrint({
     content: () => componentBRef.current,
-    pageStyle: "@page { size: A4; margin: 0; }",
+    pageStyle: "@page { size: A4; margin: 40px; }",
   });
 
   const handleSendEmail = async () => {
