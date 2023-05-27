@@ -6,8 +6,9 @@ function CartDetails() {
   const [cartDetails, setCartDetails] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
+  const [size, setSize] = useState(0)
 
-  let stt = page * pageCount;
+  let stt = page * size + 1
 
   const handlePageClick = (event) => {
     setPage(+event.selected);
@@ -19,6 +20,7 @@ function CartDetails() {
         const cartDetailsResponse = await cartDetailService.listTotalALL(page);
         setCartDetails(cartDetailsResponse.data.content);
         setPageCount(cartDetailsResponse.data.totalPages);
+        setSize(cartDetailsResponse.data.size)
       } catch (error) {
         console.warn(error);
       }
@@ -47,7 +49,7 @@ function CartDetails() {
           <tbody>
             {cartDetails.map((cartDetail, index) => (
               <tr key={index}>
-                <th className="align-middle">{++stt}</th>
+                <th className="align-middle">{stt++}</th>
                 <td className="align-middle" style={{ width: "20%" }}>
                   <img
                     src={cartDetail.productDTO.productImgDTOS[0].url}

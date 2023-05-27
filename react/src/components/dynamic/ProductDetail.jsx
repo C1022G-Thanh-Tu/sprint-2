@@ -18,12 +18,16 @@ function ProductDetail() {
 
   const handleAddCartDetail = async (productId, productPrice) => {
     try {
-      await carDetailService.save({
-        quantity: quantity,
-        productDTO: { id: productId },
-        total: productPrice,
-      });
-      toast.success("Thêm mới thành công");
+      if (quantity === 0) {
+        toast.warn("Hãy chọn số lượng sản phẩm");
+      } else {
+        await carDetailService.save({
+          quantity: quantity,
+          productDTO: { id: productId },
+          total: productPrice,
+        });
+        toast.success("Thêm mới thành công");
+      }
     } catch (error) {
       console.warn(error);
       const errMsg = error.response.data;

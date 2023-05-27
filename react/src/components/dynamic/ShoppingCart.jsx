@@ -263,7 +263,7 @@ function ShoppingCart() {
                     </div>
                     <div className="col-lg-4 bg-grey">
                       <div className="p-5">
-                        <h3 className="fw-bold mb-5 mt-2 pt-1">
+                        <h3 className="fw-bold mb-5 pt-1" style={{marginTop: '45px'}}>
                           Tóm tắt giỏ hàng
                         </h3>
                         <hr className="my-4" />

@@ -9,6 +9,7 @@ import com.example.api.service.vnpay.impl.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -23,13 +24,14 @@ import java.util.*;
 public class VNPayController {
     @Autowired
     private VNPayService vnPayService;
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment (@RequestBody PaymentReqDTO paymentReqDTO) throws UnsupportedEncodingException {
 //        String orderType = req.getParameter("ordertype");
 //        long amount = Integer.parseInt(req.getParameter("amount"))*100;
 //        String bankCode = req.getParameter("bankCode");
 
-        long amount = paymentReqDTO.getAmount()*10;
+        long amount = paymentReqDTO.getAmount()*100;
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
 //        String vnp_IpAddr = VNPayConfig.getIpAddress(req);
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
