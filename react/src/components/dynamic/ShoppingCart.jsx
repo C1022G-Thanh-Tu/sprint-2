@@ -39,6 +39,13 @@ function ShoppingCart() {
           navigate("/login")
         }
       })
+    } else if (total === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Chưa có sản phẩm trong giỏ hàng",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } else {
       const res = await paymentService.pay({amount: total})
       window.location.href = res.data.url

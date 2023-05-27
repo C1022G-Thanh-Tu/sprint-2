@@ -44,7 +44,7 @@ function Header() {
                   </span>
                 </a>
                 <span className="mx-md-2 d-inline-block"></span>
-                <a href="#">
+                <a href="https://www.facebook.com/nongtraichanhvietlongan" target='blank'>
                   <span className="mr-2">
                     <i className="bi bi-facebook text-white"></i>
                   </span>
