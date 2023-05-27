@@ -2,6 +2,7 @@ package com.example.api.dto.user;
 
 import com.example.api.entity.user.Role;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserDTO {
@@ -17,6 +18,8 @@ public class UserDTO {
     private String password;
     private Set<Role> roles;
     private Boolean isDelete = false;
+    private String avatar;
+    private Set<RoleDTO> roleDTOS = new HashSet<>();
 
     public UserDTO() {
     }
@@ -115,5 +118,21 @@ public class UserDTO {
 
     public void setDelete(Boolean delete) {
         isDelete = delete;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Set<RoleDTO> getRoleDTOS() {
+        return roleDTOS;
+    }
+
+    public void setRoleDTOS(Set<RoleDTO> roleDTOS) {
+        this.roleDTOS = roleDTOS;
     }
 }

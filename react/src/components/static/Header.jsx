@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import userService from "../../service/userService";
 
 function Header() {
+  const [userDetail, setUserDetail] = useState();
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -10,7 +13,22 @@ function Header() {
     localStorage.removeItem("name");
     navigate("/");
   };
+
   const name = localStorage.getItem("name");
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const detail = async () => {
+      try {
+        const res = await userService.getUserDetail();
+        setUserDetail(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    detail();
+  }, [token]);
+
   return (
     <>
       <div className="top-bar bg-dark pt-2 pb-2">
@@ -44,7 +62,10 @@ function Header() {
                   </span>
                 </a>
                 <span className="mx-md-2 d-inline-block"></span>
-                <a href="https://www.facebook.com/nongtraichanhvietlongan" target='blank'>
+                <a
+                  href="https://www.facebook.com/nongtraichanhvietlongan"
+                  target="blank"
+                >
                   <span className="mr-2">
                     <i className="bi bi-facebook text-white"></i>
                   </span>
@@ -141,20 +162,26 @@ function Header() {
           {!name ? (
             <NavLink
               to={"/login"}
-              style={{ textDecoration: "none", width: "180px" }}
-              className="fs-5"
+              style={{ textDecoration: "none", width: "100px" }}
+              className="fs-5 text-center"
             >
               Đăng nhập
             </NavLink>
           ) : (
             <div className="dropdown">
               <a
-                className="dropdown-toggle fs-5"
+                className="dropdown-toggle fs-5 text-center"
                 type="button"
                 data-bs-toggle="dropdown"
-                style={{ textDecoration: "none", width: "180px" }}
+                style={{ textDecoration: "none", width: "100px" }}
               >
-                {name}
+                <img
+                  src={userDetail?.avatar}
+                  className="rounded-circle"
+                  width="40%"
+                  height="40%"
+                  alt="avatar"
+                />
               </a>
               <ul className="dropdown-menu">
                 <li>
@@ -166,8 +193,8 @@ function Header() {
                   <hr className="dropdown-divider" />
                 </li>
                 <li>
-                  <Link to={"/change-password"} className="dropdown-item">
-                    Đổi mật khẩu
+                  <Link to={"/profile"} className="dropdown-item">
+                    Thông tin cá nhân
                   </Link>
                 </li>
                 <li>

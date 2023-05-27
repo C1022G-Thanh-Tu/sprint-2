@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/product")
 @CrossOrigin("*")
 public class ProductRestController {
-    StringBuilder stringBuilder = new StringBuilder();
     @Autowired
     private IProductService productService;
     @GetMapping("")

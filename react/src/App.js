@@ -14,7 +14,7 @@ import Contact from "./components/static/Contact";
 import Register from "./components/dynamic/Register"
 import PaymentResult from "./components/dynamic/PaymentResult";
 import CartDetails from "./components/dynamic/CartDetails";
-import ChangePassword from "./components/dynamic/ChangePassword";
+import UserProfile from "./components/dynamic/UserProfile";
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart-detail" element={<CartDetails />} />
-            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/profile" element={<UserProfile />} />
           </Route>
           <Route path="/payment-info" element={<PaymentResult />} />
           <Route path="/register" element={<Register />} />

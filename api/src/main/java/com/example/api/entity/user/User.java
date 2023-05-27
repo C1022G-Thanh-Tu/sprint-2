@@ -34,6 +34,8 @@ public class User {
     private String password;
     private LocalDateTime expiryTime;
     private String otpSecret;
+    @Column(columnDefinition = "text")
+    private String avatar;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinTable(name = "roles_user",
@@ -138,5 +140,13 @@ public class User {
 
     public void setOtpSecret(String otpSecret) {
         this.otpSecret = otpSecret;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
