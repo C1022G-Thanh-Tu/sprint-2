@@ -28,7 +28,6 @@ public class VNPayController {
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment (@RequestBody PaymentReqDTO paymentReqDTO) throws UnsupportedEncodingException {
 //        String orderType = req.getParameter("ordertype");
-//        long amount = Integer.parseInt(req.getParameter("amount"))*100;
 //        String bankCode = req.getParameter("bankCode");
 
         long amount = paymentReqDTO.getAmount()*100;
@@ -111,23 +110,23 @@ public class VNPayController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/payment-info")
-    public ResponseEntity<?> transaction (
-            @RequestParam(value = "vnp_Amount") String amount,
-            @RequestParam(value = "vnp_BankCode") String bankCode,
-            @RequestParam(value = "vnp_OrderInfo") String order,
-            @RequestParam(value = "vnp_ResponseCode") String responseCode
-    ) {
-        TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
-        if (responseCode.equals("00")) {
-            transactionStatusDTO.setStatus("OK");
-            transactionStatusDTO.setMsg("Thành công");
-            transactionStatusDTO.setData("");
-        } else {
-            transactionStatusDTO.setStatus("NO");
-            transactionStatusDTO.setMsg("Thất bại");
-            transactionStatusDTO.setData("");
-        }
-        return new ResponseEntity<>(transactionStatusDTO, HttpStatus.OK);
-    }
+//    @GetMapping("/payment-info")
+//    public ResponseEntity<?> transaction (
+//            @RequestParam(value = "vnp_Amount") String amount,
+//            @RequestParam(value = "vnp_BankCode") String bankCode,
+//            @RequestParam(value = "vnp_OrderInfo") String order,
+//            @RequestParam(value = "vnp_ResponseCode") String responseCode
+//    ) {
+//        TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
+//        if (responseCode.equals("00")) {
+//            transactionStatusDTO.setStatus("OK");
+//            transactionStatusDTO.setMsg("Thành công");
+//            transactionStatusDTO.setData("");
+//        } else {
+//            transactionStatusDTO.setStatus("NO");
+//            transactionStatusDTO.setMsg("Thất bại");
+//            transactionStatusDTO.setData("");
+//        }
+//        return new ResponseEntity<>(transactionStatusDTO, HttpStatus.OK);
+//    }
 }
