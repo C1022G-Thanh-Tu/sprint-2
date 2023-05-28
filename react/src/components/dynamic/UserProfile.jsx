@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import loginService from "../../service/loginService";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
 import userService from "../../service/userService";
@@ -41,14 +41,15 @@ function UserProfile() {
           <div className="container p-5 shadow-cosmetics-1 ">
             <div className="row">
               <div className="col-3 mt-3">
-                <div>
+                <div className="d-flex flex-column align-items-center">
                   <img
                     src={userDetail?.avatar}
                     className="border-avatar rounded-circle"
-                    width="100%"
-                    height="100%"
+                    width="80%"
+                    height="80%"
                     alt="avatar"
                   />
+                  <Link to="/profile-edit" className="btn btn-outline-success mt-3">Chỉnh sửa thông tin</Link>
                 </div>
               </div>
               <div className="col-9">
@@ -184,7 +185,7 @@ function UserProfile() {
                           </thead>
                           <tbody>
                             <tr>
-                              <th className="th-dieucosmetics ">
+                              <th className="th-dieucosmetics">
                                 <span
                                   type="button"
                                   onClick={() => {

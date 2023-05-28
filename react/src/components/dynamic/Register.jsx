@@ -16,9 +16,11 @@ function Register() {
       today.getDate()
     );
   };
+
   useEffect(() => {
     document.title = "Đăng Ký";
   }, []);
+
   return (
     <>
       <div
@@ -75,7 +77,7 @@ function Register() {
                             "^(090|091|\\(84\\)\\+90|\\(84\\)\\+91)[\\d]{7}$",
                             "Số điện thoại phải đúng định dạng 090xxxxxxx hoặc 091xxxxxxx hoặc (84)+90xxxxxxx hoặc (84)+91xxxxxxx."
                           ),
-                        address: Yup.date().required(
+                        address: Yup.string().required(
                           "Trường này bắt buộc nhập"
                         ),
                         dateOfBirth: Yup.date()
@@ -135,16 +137,11 @@ function Register() {
                                 className="form-control form-control-lg"
                               />
                             </div>
-                            <ErrorMessage
-                              name="name"
-                              component="div"
-                              className="text-danger"
-                            />
                           </div>
                           <div className="col-md-6 mb-4">
                             <div className="form-outline">
                               <label className="form-label" htmlFor="username">
-                                Tên đăng ký{" "}
+                                Tên đăng ký
                                 <span className="text-danger">*</span>
                               </label>
                               <Field
@@ -173,7 +170,7 @@ function Register() {
                                   htmlFor="password"
                                   className="form-label"
                                 >
-                                  Mật khẩu{" "}
+                                  Mật khẩu
                                   <span className="text-danger">*</span>
                                 </label>
                               </div>
@@ -210,20 +207,20 @@ function Register() {
                             </div>
                           </div>
                           <div className="col-md-6 mb-4">
-                            <h6 className="mb-2 pb-1">Gender: </h6>
+                            <h6 className="mb-2 pb-1">Giới tính: </h6>
                             <div className="form-check form-check-inline">
                               <Field
                                 className="form-check-input"
                                 type="radio"
                                 name="gender"
                                 id="female"
-                                value="false"
+                                value="true"
                               />
                               <label
                                 className="form-check-label"
                                 htmlFor="female"
                               >
-                                Female
+                                Nữ
                               </label>
                             </div>
                             <div className="form-check form-check-inline">
@@ -232,13 +229,13 @@ function Register() {
                                 type="radio"
                                 name="gender"
                                 id="male"
-                                value="true"
+                                value="false"
                               />
                               <label
                                 className="form-check-label"
                                 htmlFor="male"
                               >
-                                Male
+                                Nam
                               </label>
                             </div>
                           </div>
@@ -272,7 +269,7 @@ function Register() {
                                 className="form-label"
                                 htmlFor="phoneNumber"
                               >
-                                Số điện thoại{" "}
+                                Số điện thoại
                                 <span className="text-danger">*</span>
                               </label>
                               <Field

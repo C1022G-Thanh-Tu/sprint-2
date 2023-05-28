@@ -15,6 +15,7 @@ import Register from "./components/dynamic/Register"
 import PaymentResult from "./components/dynamic/PaymentResult";
 import CartDetails from "./components/dynamic/CartDetails";
 import UserProfile from "./components/dynamic/UserProfile";
+import UserProfileEdit from "./components/dynamic/UserProfileEdit";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart-detail" element={<CartDetails />} />
             <Route path="/profile" element={<UserProfile />} />
+            <Route path="/profile-edit" element={<UserProfileEdit />} />
           </Route>
           <Route path="/payment-info" element={<PaymentResult />} />
           <Route path="/register" element={<Register />} />
