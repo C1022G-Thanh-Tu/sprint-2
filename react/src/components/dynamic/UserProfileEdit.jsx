@@ -7,23 +7,27 @@ import Swal from "sweetalert2";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase/firebase";
 import { Oval } from "react-loader-spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { showDetailAction, updateAction } from "../../redux/action/UserDetail/showDetail"
 
 function UserProfileEdit() {
-  const [userDetail, setUserDetail] = useState();
+  // const [userDetail, setUserDetail] = useState();
   const [imageSrc, setImageSrc] = useState("");
-  const [imgName, setImgName] = useState("");
+  const [img, setImg] = useState("");
   const [firebaseImg, setFirebaseImg] = useState("");
   const [progresspercent, setProgresspercent] = useState(0);
   const [isChangeImg, setIsChangeImg] = useState(false);
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userDetail = useSelector(state => state.userDetail)
 
   const handleSubmitAsync = async () => {
     return new Promise((resolve, reject) => {
-      const file = imgName;
+      const file = img;
       if (!file) return reject("No file selected");
-      const storageRef = ref(storage, `files/${file}`);
+      const storageRef = ref(storage, `files/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
@@ -57,7 +61,7 @@ function UserProfileEdit() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setImgName(file.name);
+    setImg(file);
     setIsChangeImg(true);
     const reader = new FileReader();
 
@@ -69,22 +73,27 @@ function UserProfileEdit() {
     reader.readAsDataURL(file);
   };
 
-  useEffect(() => {
-    const detail = async () => {
-      try {
-        const res = await userService.getUserDetail();
-        setUserDetail(res.data);
-        setImageSrc(res.data.avatar);
-      } catch (error) {
-        console.warn(error);
-      }
-    };
-    detail();
-  }, [token]);
+  // useEffect(() => {
+  //   const detail = async () => {
+  //     try {
+  //       const res = await userService.getUserDetail();
+  //       setUserDetail(res.data);
+  //       setImageSrc(res.data.avatar);
+  //     } catch (error) {
+  //       console.warn(error);
+  //     }
+  //   };
+  //   detail();
+  // }, [token]);
 
-  if (!userDetail) {
-    return null;
-  }
+  useEffect(() => {
+    dispatch(showDetailAction())
+    setImageSrc(userDetail.avatar)
+  }, [dispatch, token, userDetail.avatar])
+
+  // if (!userDetail) {
+  //   return null;
+  // }
 
   return (
     <div>
@@ -97,7 +106,7 @@ function UserProfileEdit() {
                   src={imageSrc}
                   className="border-avatar rounded-circle"
                   width="80%"
-                  height="80%"
+                  height="252px"
                   alt="avatar"
                 />
                 <label
@@ -117,6 +126,7 @@ function UserProfileEdit() {
             </div>
             <div className="col-9">
               <Formik
+                enableReinitialize={true}
                 initialValues={{
                   name: userDetail?.name,
                   email: userDetail?.email,
@@ -153,18 +163,20 @@ function UserProfileEdit() {
                       if (isChangeImg) {
                         const newValues = { ...values, avatar: firebaseImg };
                         newValues.avatar = await handleSubmitAsync();
-                        setIsChangeImg(false)
+                        // await userService.updateUserDetail(newValues);
+                        dispatch(updateAction(newValues))
+                      } else {
+                        // await userService.updateUserDetail(values);
+                        dispatch(updateAction(values))
                       }
-                      // await loginService.register(newValues);
+                      setIsChangeImg(false)
                       Swal.fire({
                         icon: "success",
                         title: "Chỉnh sửa thông tin cá nhân thành công",
                         showConfirmButton: false,
                         timer: 1500,
                       });
-                      
                       document.getElementById("email-err").innerText = "";
-                      setSubmitting(false);
                       navigate("/profile");
                     } catch (error) {
                       console.warn(error);
@@ -215,8 +227,7 @@ function UserProfileEdit() {
                                     type="radio"
                                     name="gender"
                                     id="female"
-                                    value={true}
-                                    checked={userDetail?.gender === true}
+                                    value={userDetail?.gender}
                                   />
                                   <label
                                     className="form-check-label fs-6"
@@ -231,8 +242,7 @@ function UserProfileEdit() {
                                     type="radio"
                                     name="gender"
                                     id="male"
-                                    value={false}
-                                    checked={userDetail?.gender === false}
+                                    value={userDetail?.gender}
                                   />
                                   <label
                                     className="form-check-label fs-6"
@@ -317,11 +327,11 @@ function UserProfileEdit() {
                               </th>
                               <td>
                                 <Field
-                                  type="text"
+                                  as="textarea"
                                   id="address"
                                   name="address"
                                   className="form-control"
-                                />
+                                ></Field>
                                 <ErrorMessage
                                   name="address"
                                   component="div"
@@ -352,7 +362,7 @@ function UserProfileEdit() {
                                 <td>
                                   <button
                                     type="submit"
-                                    className="btn btn-outline-primary"
+                                    className="btn btn-outline-primary mt-4"
                                   >
                                     Lưu thông tin
                                   </button>

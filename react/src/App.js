@@ -13,7 +13,7 @@ import ScrollToTop from "./util/ScrollToTop";
 import Contact from "./components/static/Contact";
 import Register from "./components/dynamic/Register"
 import PaymentResult from "./components/dynamic/PaymentResult";
-import CartDetails from "./components/dynamic/CartDetails";
+import CartDetails from "./components/dynamic/PurchasedCartDetails";
 import UserProfile from "./components/dynamic/UserProfile";
 import UserProfileEdit from "./components/dynamic/UserProfileEdit";
 

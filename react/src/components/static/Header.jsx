@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import userService from "../../service/userService";
+import { useDispatch, useSelector } from "react-redux";
+import { showDetailAction } from "../../redux/action/UserDetail/showDetail"
 
 function Header() {
-  const [userDetail, setUserDetail] = useState();
+  // const [userDetail, setUserDetail] = useState();
 
   const navigate = useNavigate();
 
@@ -16,18 +18,24 @@ function Header() {
 
   const name = localStorage.getItem("name");
   const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const userDetail = useSelector(state => state.userDetail)
+
+  // useEffect(() => {
+  //   const detail = async () => {
+  //     try {
+  //       const res = await userService.getUserDetail();
+  //       setUserDetail(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   detail();
+  // }, [token]);
 
   useEffect(() => {
-    const detail = async () => {
-      try {
-        const res = await userService.getUserDetail();
-        setUserDetail(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    detail();
-  }, [token]);
+    dispatch(showDetailAction())
+  }, [dispatch, token])
 
   return (
     <>
@@ -179,7 +187,7 @@ function Header() {
                   src={userDetail?.avatar}
                   className="rounded-circle"
                   width="40%"
-                  height="40%"
+                  height="40px"
                   alt="avatar"
                 />
               </a>

@@ -118,6 +118,7 @@ function Login() {
                         const login = async () => {
                           try {
                             const rs = await loginService.login(value);
+                            console.log(rs);
                             localStorage.setItem("token", rs.data.token);
                             localStorage.setItem("name", rs.data.name);
                             localStorage.setItem("email", rs.data.email)
@@ -135,19 +136,19 @@ function Login() {
                             navigate("/");
                           } catch (error) {
                             console.warn(error);
-                            const err = error.response.data;
-                            if (
-                              err.message === "Tên người dùng không tồn tại"
-                            ) {
-                              document.getElementById(
-                                "usernameError"
-                              ).innerText = "Tên người dùng không tồn tại";
-                            }
-                            if (err === "" || err.status === 403) {
-                              document.getElementById(
-                                "passwordError"
-                              ).innerText = "Mật khẩu không chính xác";
-                            }
+                            // const err = error.response.data;
+                            // if (
+                            //   err.message === "Tên người dùng không tồn tại"
+                            // ) {
+                            //   document.getElementById(
+                            //     "usernameError"
+                            //   ).innerText = "Tên người dùng không tồn tại";
+                            // }
+                            // if (err === "" || err.status === 403) {
+                            //   document.getElementById(
+                            //     "passwordError"
+                            //   ).innerText = "Mật khẩu không chính xác";
+                            // }
                           }
                         };
                         login();

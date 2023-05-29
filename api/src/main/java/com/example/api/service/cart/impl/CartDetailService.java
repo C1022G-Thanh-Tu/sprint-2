@@ -33,6 +33,9 @@ public class CartDetailService implements ICartDetailService {
     @Autowired
     private IProductRepository productRepository;
     Integer count = 0;
+    public void resetCount() {
+        count = 0;
+    }
     @Override
     public String save(CartDetailDTO cartDetailDTO) {
         Product product = productRepository.findById(cartDetailDTO.getProductDTO().getId()).get();
@@ -125,8 +128,8 @@ public class CartDetailService implements ICartDetailService {
     }
 
     @Override
-    public Page<CartDetailDTO> findTotalAll(Pageable pageable) {
-        Page<CartDetail> cartDetails = cartDetailRepository.findTotalAll(pageable);
+    public Page<CartDetailDTO> findTotalAll(String customerName, Pageable pageable) {
+        Page<CartDetail> cartDetails = cartDetailRepository.findTotalAll(customerName, pageable);
         List<CartDetailDTO> cartDetailDTOS = new ArrayList<>();
         CartDetailDTO cartDetailDTO;
         for (CartDetail cartDetail: cartDetails) {
@@ -138,9 +141,5 @@ public class CartDetailService implements ICartDetailService {
             cartDetailDTOS.add(cartDetailDTO);
         }
         return new PageImpl<>(cartDetailDTOS, pageable, cartDetails.getTotalElements());
-    }
-
-    public void resetCount() {
-        count = 0;
     }
 }

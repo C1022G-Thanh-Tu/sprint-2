@@ -35,11 +35,12 @@ public class CartDetailRestController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Page<CartDetailDTO>> listTotalAll(@PageableDefault(sort = {"id"},
-            direction = Sort.Direction.DESC,size = 3)Pageable pageable) {
-        Page<CartDetailDTO> cartDetailDTOS = cartDetailService.findTotalAll(pageable);
+    public ResponseEntity<Page<CartDetailDTO>> listTotalAll(
+            @RequestParam(required = false, defaultValue = "") String customerName,
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC,size = 3)Pageable pageable) {
+        Page<CartDetailDTO> cartDetailDTOS = cartDetailService.findTotalAll(customerName,pageable);
         if (cartDetailDTOS.isEmpty()) {
-            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
     }

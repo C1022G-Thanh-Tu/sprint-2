@@ -1,6 +1,7 @@
 package com.example.api.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
+    @JoinTable(name = "roles_user",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    Set<Role> roles = new HashSet<>();
     private String name;
     private boolean gender;
     @Column(name = "date_of_birth")
@@ -36,13 +44,6 @@ public class User {
     private String otpSecret;
     @Column(columnDefinition = "text")
     private String avatar;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonBackReference
-    @JoinTable(name = "roles_user",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")}
-    )
-    Set<Role> roles = new HashSet<>();
     public User() {
     }
 

@@ -1,7 +1,12 @@
 import request from '../config/request'
 
 const pay = ({amount}) => {
-    return request.post(`/api/payment/create_payment`, {amount})
+    const token = localStorage.getItem('token')
+    return request.post(`/api/payment/create_payment`, {amount}, {
+        headers : {
+            'Authorization': `Bearer ${token}`
+        }
+    })
 }
 
 const sendEmail = (paymentInfo) => {

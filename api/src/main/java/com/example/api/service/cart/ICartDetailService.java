@@ -12,5 +12,5 @@ public interface ICartDetailService {
     void delete(int id);
     List<CartDetailDTO> findAll();
     void deleteAll(int id);
-    Page<CartDetailDTO> findTotalAll(Pageable pageable);
+    Page<CartDetailDTO> findTotalAll(String customerName, Pageable pageable);
 }

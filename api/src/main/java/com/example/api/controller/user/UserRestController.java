@@ -12,11 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Optional;
@@ -54,6 +50,30 @@ public class UserRestController {
             BeanUtils.copyProperties(user.get(), userDTO);
             userDTO.setRoleDTOS(roleDTOSet);
             return new ResponseEntity<>(userDTO,HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(new ResponseMessage("JWT không tồn tại"),HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updateUserInfo(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+        String token = jwtAuthenticationFilter.getJwt(request);
+        if(token!=null &&jwtTokenProvider.validateToken(token)){
+            String username = jwtTokenProvider.getUserNameFromToken(token);
+            if(Boolean.FALSE.equals(userService.existsByUsername(username))){
+                return new ResponseEntity<>(new ResponseMessage("Tên người dùng không tồn tại")
+                        , HttpStatus.BAD_REQUEST);
+            }
+            Optional<User> user = userService.findByUsername(username);
+            user.get().setAddress(userDTO.getAddress());
+            user.get().setGender(userDTO.isGender());
+            user.get().setPhoneNumber(userDTO.getPhoneNumber());
+            user.get().setDateOfBirth(userDTO.getDateOfBirth());
+            user.get().setEmail(userDTO.getEmail());
+            user.get().setName(userDTO.getName());
+            user.get().setAvatar(userDTO.getAvatar());
+            userService.save(user.get());
+            return new ResponseEntity<>(HttpStatus.OK);
         }else {
             return new ResponseEntity<>(new ResponseMessage("JWT không tồn tại"),HttpStatus.BAD_REQUEST);
         }

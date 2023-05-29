@@ -6,34 +6,41 @@ import Swal from "sweetalert2";
 import * as Yup from "yup";
 import userService from "../../service/userService";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { showDetailAction } from "../../redux/action/UserDetail/showDetail"
 
 function UserProfile() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showFormChangePassword, setShowFormChangePassword] = useState(false);
-  const [userDetail, setUserDetail] = useState();
+  // const [userDetail, setUserDetail] = useState();
 
   const token = localStorage.getItem("token");
-
+  const dispatch = useDispatch();
+  const userDetail = useSelector(state => state.userDetail)
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const detail = async () => {
-      try {
-        const res = await userService.getUserDetail();
-        setUserDetail(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    detail();
-  }, [token]);
+  // useEffect(() => {
+  //   const detail = async () => {
+  //     try {
+  //       const res = await userService.getUserDetail();
+  //       setUserDetail(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   detail();
+  // }, [token]);
 
-  if (!userDetail) {
+  useEffect(() => {
+    dispatch(showDetailAction())
+  }, [dispatch, token])
+
+  if (Object.keys(userDetail).length === 0) {
     return null;
   }
-
+  
   return (
     <>
       <div>
@@ -46,7 +53,7 @@ function UserProfile() {
                     src={userDetail?.avatar}
                     className="border-avatar rounded-circle"
                     width="80%"
-                    height="80%"
+                    height="252px"
                     alt="avatar"
                   />
                   <Link to="/profile-edit" className="btn btn-outline-success mt-3">Chỉnh sửa thông tin</Link>

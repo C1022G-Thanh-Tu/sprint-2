@@ -4,8 +4,8 @@ const findAll = () => {
     return request.get("/cart-detail")
 }
 
-const listTotalALL = (page) => {
-    return request.get(`/cart-detail/list?page=${page?page:0}`)
+const listTotalALL = (name,page) => {
+    return request.get(`/cart-detail/list?page=${page?page:0}&customerName=${name}`)
 }
 
 const save = (cartDetail) => {

@@ -136,6 +136,11 @@ function Register() {
                                 name="name"
                                 className="form-control form-control-lg"
                               />
+                              <ErrorMessage
+                                name="name"
+                                component="div"
+                                className="text-danger"
+                              />
                             </div>
                           </div>
                           <div className="col-md-6 mb-4">
