@@ -164,10 +164,10 @@ function UserProfileEdit() {
                         const newValues = { ...values, avatar: firebaseImg };
                         newValues.avatar = await handleSubmitAsync();
                         // await userService.updateUserDetail(newValues);
-                        dispatch(updateAction(newValues))
+                        await dispatch(updateAction(newValues))
                       } else {
                         // await userService.updateUserDetail(values);
-                        dispatch(updateAction(values))
+                        await dispatch(updateAction(values))
                       }
                       setIsChangeImg(false)
                       Swal.fire({

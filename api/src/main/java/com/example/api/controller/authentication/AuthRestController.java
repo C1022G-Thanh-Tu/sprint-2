@@ -1,5 +1,4 @@
 package com.example.api.controller.authentication;
-
 import com.example.api.dto.request.ChangePasswordRequest;
 import com.example.api.dto.request.RegisterForm;
 import com.example.api.dto.request.ResetPasswordRequest;
@@ -30,7 +29,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -78,11 +76,11 @@ public class AuthRestController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterForm registerForm){
 
-        if(Boolean.TRUE.equals(userService.existsByUsername(registerForm.getUsername()))){
+        if(Boolean.TRUE.equals(userService.existsByUsername(registerForm.getUsername()))) {
             return new ResponseEntity<>("Tên đăng ký đã tồn tại!.", HttpStatus.BAD_REQUEST);
         }
 
-        if(Boolean.TRUE.equals(userService.existsByEmail(registerForm.getEmail()))){
+        if(Boolean.TRUE.equals(userService.existsByEmail(registerForm.getEmail()))) {
             return new ResponseEntity<>("Email đã tồn tại!.", HttpStatus.BAD_REQUEST);
         }
 

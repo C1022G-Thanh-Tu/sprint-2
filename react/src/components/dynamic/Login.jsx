@@ -3,11 +3,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import loginService from "../../service/loginService";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import loginStyle from "./loginStyle.module.css";
+import loginStyle from "../../loginStyle.module.css";
 import { RotatingLines } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
-import { GOOGLE_AUTH_URL } from '../constants/constants';
+import { GOOGLE_AUTH_URL } from "../constants/constants";
 
 function Login() {
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -118,37 +118,40 @@ function Login() {
                         const login = async () => {
                           try {
                             const rs = await loginService.login(value);
-                            console.log(rs);
                             localStorage.setItem("token", rs.data.token);
                             localStorage.setItem("name", rs.data.name);
-                            localStorage.setItem("email", rs.data.email)
+                            localStorage.setItem("email", rs.data.email);
                             localStorage.setItem(
                               "roles",
                               rs.data.roles[0].authority
                             );
-                            localStorage.setItem("username", rs.data.userName)
+                            localStorage.setItem("username", rs.data.userName);
                             Swal.fire({
                               icon: "success",
                               title: "Đăng nhập thành công",
                               showConfirmButton: false,
                               timer: 1500,
                             });
+                            document.getElementById("usernameError").innerText =
+                              "";
+                            document.getElementById("passwordError").innerText =
+                              "";
                             navigate("/");
                           } catch (error) {
                             console.warn(error);
-                            // const err = error.response.data;
-                            // if (
-                            //   err.message === "Tên người dùng không tồn tại"
-                            // ) {
-                            //   document.getElementById(
-                            //     "usernameError"
-                            //   ).innerText = "Tên người dùng không tồn tại";
-                            // }
-                            // if (err === "" || err.status === 403) {
-                            //   document.getElementById(
-                            //     "passwordError"
-                            //   ).innerText = "Mật khẩu không chính xác";
-                            // }
+                            const err = error.response.data;
+                            if (
+                              err.message === "Tên người dùng không tồn tại"
+                            ) {
+                              document.getElementById(
+                                "usernameError"
+                              ).innerText = "Tên người dùng không tồn tại";
+                            }
+                            if (err === "" || err.status === 403) {
+                              document.getElementById(
+                                "passwordError"
+                              ).innerText = "Mật khẩu không chính xác";
+                            }
                           }
                         };
                         login();
