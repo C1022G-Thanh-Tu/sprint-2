@@ -1,15 +1,15 @@
 import request from '../config/request'
 
-const findAll = () => {
-    return request.get("/cart-detail")
+const findAll = (name) => {
+    return request.get(`/cart-detail?customerName=${name}`)
 }
 
 const listTotalALL = (name,page) => {
     return request.get(`/cart-detail/list?page=${page?page:0}&customerName=${name}`)
 }
 
-const save = (cartDetail) => {
-    return request.post(`/cart-detail`, {...cartDetail})
+const save = (cartDetail, name) => {
+    return request.post(`/cart-detail?customerName=${name}`, {...cartDetail})
 }
 
 const remove = (id) => {
@@ -20,12 +20,18 @@ const update = (id, quantity) => {
     return request.put(`cart-detail/${id}/${quantity}`)
 }
 
+const resetCount = () => {
+    return request.get(`/cart-detail/log-out`)
+}
+
+
 const cartDetailService = {
     findAll,
     save,
     remove,
     update,
-    listTotalALL
+    listTotalALL,
+    resetCount
 }
 
 export default cartDetailService

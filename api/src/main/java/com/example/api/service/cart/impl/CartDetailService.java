@@ -37,23 +37,37 @@ public class CartDetailService implements ICartDetailService {
         count = 0;
     }
     @Override
-    public String save(CartDetailDTO cartDetailDTO) {
+    public String save(CartDetailDTO cartDetailDTO, String customerName) {
         Product product = productRepository.findById(cartDetailDTO.getProductDTO().getId()).get();
+
         if (product.getQuantity() < cartDetailDTO.getQuantity()) {
             return "Số lượng không đủ";
         }
-        if (count == 0) {
-            Cart cart = new Cart();
-            cartRepository.save(cart);
+
+        if (customerName == null) {
+            customerName = "";
         }
+
         CartDetail cartDetail = new CartDetail();
         cartDetail.setProduct(new Product());
         BeanUtils.copyProperties(cartDetailDTO.getProductDTO(), cartDetail.getProduct());
         BeanUtils.copyProperties(cartDetailDTO, cartDetail);
-        cartDetail.setCart(cartRepository.findTheLastCart());
+        Cart cart = cartRepository.findWithCustomerNameAndIsDelete(customerName);
+
+        if (count == 0 && cart !=null && !cart.isDelete() && cart.getCustomerName().equals(customerName)) {
+            cartDetail.setCart(cart);
+        } else if (count == 0) {
+            Cart cart1 = new Cart();
+            cart1.setCustomerName(customerName);
+            cartRepository.save(cart1);
+        }
+
+        cartDetail.setCart(cartRepository.findWithCustomerNameAndIsDelete(customerName));
+
         if (product.getQuantity() - cartDetail.getQuantity() < 0) {
             return "Số lượng không đủ";
         }
+
         product.setQuantity(product.getQuantity() - cartDetail.getQuantity());
         productRepository.save(product);
         List<CartDetail> cartDetails = cartDetailRepository.findAll();
@@ -62,6 +76,7 @@ public class CartDetailService implements ICartDetailService {
             count++;
             return "";
         }
+
         for (int i = cartDetails.size() - 1; i >= 0; i--) {
             if (count != 0 && cartDetails.get(i).getProduct().equals(product)  && !cartDetails.get(i).isDelete()) {
                 cartDetails.get(i).setQuantity(cartDetails.get(i).getQuantity() + cartDetailDTO.getQuantity());
@@ -69,6 +84,7 @@ public class CartDetailService implements ICartDetailService {
                 return "";
             }
         }
+
         cartDetailRepository.save(cartDetail);
         count++;
         return "";
@@ -103,8 +119,8 @@ public class CartDetailService implements ICartDetailService {
     }
 
     @Override
-    public List<CartDetailDTO> findAll() {
-        List<CartDetail> cartDetails = cartDetailRepository.findAllIsDeleteFalse();
+    public List<CartDetailDTO> findAll(String customerName) {
+        List<CartDetail> cartDetails = cartDetailRepository.findAllIsDeleteFalse(customerName);
         List<CartDetailDTO> cartDetailDTOS = new ArrayList<>();
         CartDetailDTO cartDetailDTO;
         for (CartDetail cartDetail: cartDetails) {

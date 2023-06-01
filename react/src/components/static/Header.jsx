@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import userService from "../../service/userService";
 import { useDispatch, useSelector } from "react-redux";
-import { showDetailAction } from "../../redux/action/UserDetail/showDetail"
+import { showUserDetailAction } from "../../redux/action/UserDetail/userDetailAction";
+import { setCartsAction } from "../../redux/action/CartDetail/cartDetailsAction";
+import cartDetailService from "../../service/carDetailService";
 
 function Header() {
-  // const [userDetail, setUserDetail] = useState();
-
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await cartDetailService.resetCount()
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
     localStorage.removeItem("name");
@@ -17,25 +17,17 @@ function Header() {
   };
 
   const name = localStorage.getItem("name");
-  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const userDetail = useSelector(state => state.userDetail)
-
-  // useEffect(() => {
-  //   const detail = async () => {
-  //     try {
-  //       const res = await userService.getUserDetail();
-  //       setUserDetail(res.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   detail();
-  // }, [token]);
+  const userDetail = useSelector((state) => state.userDetail);
+  const cartDetails = useSelector((state) => state.cartDetails);
 
   useEffect(() => {
-    dispatch(showDetailAction())
-  }, [dispatch, token])
+    dispatch(showUserDetailAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(setCartsAction(name));
+  }, [dispatch, name]);
 
   return (
     <>
@@ -165,7 +157,7 @@ function Header() {
           </div>
           <NavLink to="/cart" className="navbar-brand">
             <i className="bi bi-cart"></i>
-            <span className="cart-badge">3</span>
+            <span className="cart-badge">{cartDetails.length}</span>
           </NavLink>
           {!name ? (
             <NavLink

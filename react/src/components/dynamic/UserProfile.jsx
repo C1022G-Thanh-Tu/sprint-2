@@ -4,43 +4,32 @@ import loginService from "../../service/loginService";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
-import userService from "../../service/userService";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { showDetailAction } from "../../redux/action/UserDetail/showDetail"
+import { showUserDetailAction } from "../../redux/action/UserDetail/userDetailAction";
 
 function UserProfile() {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showFormChangePassword, setShowFormChangePassword] = useState(false);
-  // const [userDetail, setUserDetail] = useState();
 
-  const token = localStorage.getItem("token");
   const dispatch = useDispatch();
-  const userDetail = useSelector(state => state.userDetail)
+  const userDetail = useSelector((state) => state.userDetail);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const detail = async () => {
-  //     try {
-  //       const res = await userService.getUserDetail();
-  //       setUserDetail(res.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   detail();
-  // }, [token]);
+  useEffect(() => {
+    dispatch(showUserDetailAction());
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(showDetailAction())
-  }, [dispatch, token])
+    document.title = "Thông tin cá nhân";
+  }, []);
 
   if (Object.keys(userDetail).length === 0) {
     return null;
   }
-  
+
   return (
     <>
       <div>
@@ -56,7 +45,12 @@ function UserProfile() {
                     height="252px"
                     alt="avatar"
                   />
-                  <Link to="/profile-edit" className="btn btn-outline-success mt-3">Chỉnh sửa thông tin</Link>
+                  <Link
+                    to="/profile-edit"
+                    className="btn btn-outline-success mt-3"
+                  >
+                    Chỉnh sửa thông tin
+                  </Link>
                 </div>
               </div>
               <div className="col-9">
@@ -96,8 +90,8 @@ function UserProfile() {
                           <td className="w-50">{userDetail?.email}</td>
                         </tr>
                         <tr>
-                          <th className="th-dieucosmetics">Địa chỉ :</th>
-                          <td>{userDetail?.address}</td>
+                          <th className="th-dieucosmetics">Số điện thoại :</th>
+                          <td>{userDetail?.phoneNumber}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -184,10 +178,13 @@ function UserProfile() {
                         <table className="fs-5 font-table text-secondary">
                           <thead>
                             <tr>
-                              <th className="th-dieucosmetics" style={{width: '60%'}}>
-                                Số điện thoại :
+                              <th
+                                className="th-dieucosmetics"
+                                style={{ width: "50%" }}
+                              >
+                                Địa chỉ :
                               </th>
-                              <td>{userDetail?.phoneNumber}</td>
+                              <td>{userDetail?.address}</td>
                             </tr>
                           </thead>
                           <tbody>

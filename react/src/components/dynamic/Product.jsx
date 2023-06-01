@@ -2,9 +2,10 @@ import { Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import productService from "../../service/productService";
-import carDetailService from "../../service/carDetailService";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { addCartDetailAction } from "../../redux/action/CartDetail/cartDetailsAction";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -15,21 +16,20 @@ function Product() {
     name: "",
   });
 
-  const handleAddCartDetail = async (productId, productPrice) => {
-    try {
-      await carDetailService.save({
-        quantity: 1,
-        productDTO: { id: productId },
-        total: productPrice,
-      });
-      toast.success("Thêm vào giỏ thành công");
-    } catch (error) {
-      console.warn(error);
-      const errMsg = error.response.data;
-      if (errMsg === "Số lượng không đủ") {
-        toast.warn("Số lượng sản phẩm không đủ");
-      }
-    }
+  const dispatch = useDispatch();
+  const name = localStorage.getItem("name");
+
+  const handleAddCartDetail = (productId, productPrice) => {
+    dispatch(
+      addCartDetailAction(
+        {
+          quantity: 1,
+          productDTO: { id: productId },
+          total: productPrice,
+        },
+        name
+      )
+    );
   };
 
   const handlePageClick = () => {
@@ -133,7 +133,7 @@ function Product() {
                         to={`/product-detail/${product.id}`}
                         className="button-detail"
                       >
-                        Chi tiết
+                        <span className="d-none d-sm-inline">Chi tiết</span>
                       </Link>
                     </span>
 
@@ -146,7 +146,7 @@ function Product() {
                           handleAddCartDetail(product.id, product.price)
                         }
                       >
-                        Thêm vào giỏ
+                        <span className="d-none d-sm-inline">Thêm vào giỏ</span>
                       </button>
                     </span>
                   </div>
@@ -160,7 +160,9 @@ function Product() {
                     >
                       {product.name}{" "}
                       {product.quantity <= 10 ? (
-                        <span className="text-dark">(Còn {product.quantity} sản phẩm)</span>
+                        <span className="text-dark">
+                          (Còn {product.quantity} sản phẩm)
+                        </span>
                       ) : (
                         <></>
                       )}

@@ -5,6 +5,8 @@ import cartService from "../../service/cartService";
 import paymentService from "../../service/paymentService";
 import { Link, useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { useDispatch } from "react-redux";
+import { setCartsAction } from "../../redux/action/CartDetail/cartDetailsAction";
 
 function PaymentResult() {
   const [paymentInfo, setPaymentInfo] = useState({
@@ -22,6 +24,7 @@ function PaymentResult() {
   const navigate = useNavigate();
   const componentBRef = useRef(null);
   const url = window.location.href;
+  const dispatch = useDispatch();
 
   const handlePrint = useReactToPrint({
     content: () => componentBRef.current,
@@ -49,6 +52,7 @@ function PaymentResult() {
         customerName,
         paymentDate: paymentInfo.vnp_PayDate,
       });
+      dispatch(setCartsAction(customerName));
       handleSendEmail();
       navigate("/product");
     } catch (error) {
@@ -90,6 +94,10 @@ function PaymentResult() {
       });
     }
   }, [customerName, url]);
+
+  useEffect(() => {
+    document.title = "Thanh toán";
+  }, []);
 
   if (!url) {
     window.location.href =

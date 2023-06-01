@@ -4,15 +4,17 @@ import ReactPaginate from "react-paginate";
 
 function CartDetails() {
   const [cartDetails, setCartDetails] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(0);
+  const [pageInfo, setPageInfo] = useState({
+    pageCount: 0,
+    page: 0,
+    size: 0,
+  });
 
-  let stt = page * size + 1;
+  let stt = pageInfo.page * pageInfo.size + 1;
   const name = localStorage.getItem("name");
 
   const handlePageClick = (event) => {
-    setPage(+event.selected);
+    setPageInfo((prev) => ({ ...prev, page: +event.selected }));
   };
 
   useEffect(() => {
@@ -20,17 +22,24 @@ function CartDetails() {
       try {
         const cartDetailsResponse = await cartDetailService.listTotalALL(
           name,
-          page
+          pageInfo.page
         );
         setCartDetails(cartDetailsResponse.data.content);
-        setPageCount(cartDetailsResponse.data.totalPages);
-        setSize(cartDetailsResponse.data.size);
+        setPageInfo((prev) => ({
+          ...prev,
+          pageCount: cartDetailsResponse.data.totalPages,
+          size: cartDetailsResponse.data.size,
+        }));
       } catch (error) {
         console.warn(error);
       }
     };
     getCartDetails();
-  }, [name, page]);
+  }, [name, pageInfo.page]);
+
+  useEffect(() => {
+    document.title = "Lịch sử mua hàng";
+  }, []);
 
   return (
     <>
@@ -88,7 +97,7 @@ function CartDetails() {
               breakLabel="..."
               nextLabel=">"
               onPageChange={handlePageClick}
-              pageCount={pageCount}
+              pageCount={pageInfo.pageCount}
               pageRangeDisplayed={2}
               marginPagesDisplayed={1}
               previousLabel="<"

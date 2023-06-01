@@ -18,7 +18,10 @@ public class CartService implements ICartService {
 
     @Override
     public void update(CartDTO cartDTO) {
-        Cart cart = cartRepository.findTheLastCart();
+        Cart cart = cartRepository.findWithCustomerNameAndIsDelete(cartDTO.getCustomerName());
+        if (cart == null) {
+            cart = cartRepository.findWithNull();
+        }
         cartDTO.setId(cart.getId());
         BeanUtils.copyProperties(cartDTO, cart);
         cart.setDelete(true);

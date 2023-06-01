@@ -2,6 +2,8 @@ package com.example.api.controller.cart;
 
 import com.example.api.dto.cart.CartDetailDTO;
 import com.example.api.service.cart.ICartDetailService;
+import com.example.api.service.cart.ICartService;
+import com.example.api.service.cart.impl.CartDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,12 +25,15 @@ import java.util.Map;
 @CrossOrigin("*")
 public class CartDetailRestController {
     @Autowired
-    private ICartDetailService cartDetailService;
+    private ICartDetailService icartDetailService;
+    @Autowired
+    private CartDetailService cartDetailService;
+
     @GetMapping("")
-    public ResponseEntity<List<CartDetailDTO>> listAll() {
-        List<CartDetailDTO> cartDetailDTOS = cartDetailService.findAll();
+    public ResponseEntity<List<CartDetailDTO>> listAll(@RequestParam(required = false, defaultValue = "") String customerName) {
+        List<CartDetailDTO> cartDetailDTOS = icartDetailService.findAll(customerName);
         if (cartDetailDTOS.isEmpty()) {
-            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(cartDetailDTOS, HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
     }
@@ -35,19 +41,20 @@ public class CartDetailRestController {
     @GetMapping("/list")
     public ResponseEntity<Page<CartDetailDTO>> listTotalAll(
             @RequestParam(required = false, defaultValue = "") String customerName,
-            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC,size = 3)Pageable pageable) {
-        Page<CartDetailDTO> cartDetailDTOS = cartDetailService.findTotalAll(customerName,pageable);
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 3) Pageable pageable) {
+        Page<CartDetailDTO> cartDetailDTOS = icartDetailService.findTotalAll(customerName, pageable);
         if (cartDetailDTOS.isEmpty()) {
-            return new ResponseEntity<> (cartDetailDTOS, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(cartDetailDTOS, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createInvoiceDetail(@Valid @RequestBody CartDetailDTO cartDetailDTO,
-                                                 BindingResult bindingResult) {
+    public ResponseEntity<?> createInvoiceDetail(
+            @Valid @RequestBody CartDetailDTO cartDetailDTO,BindingResult bindingResult,
+            @RequestParam(required = false, defaultValue = "") String customerName) {
         if (!bindingResult.hasErrors()) {
-            String msg = cartDetailService.save(cartDetailDTO);
+            String msg = icartDetailService.save(cartDetailDTO, customerName);
             if (!msg.equals("")) {
                 return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
             } else {
@@ -61,7 +68,7 @@ public class CartDetailRestController {
                     map.put(error.getField(), error.getDefaultMessage());
                 }
             }
-            return new ResponseEntity<>(map,  HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -70,7 +77,7 @@ public class CartDetailRestController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        cartDetailService.delete(id);
+        icartDetailService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -79,11 +86,17 @@ public class CartDetailRestController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        String msg = cartDetailService.update(id, quantity);
+        String msg = icartDetailService.update(id, quantity);
         if (!msg.equals("")) {
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/log-out")
+    @ResponseStatus(HttpStatus.OK)
+    public void resetCount() {
+        cartDetailService.resetCount();
     }
 }

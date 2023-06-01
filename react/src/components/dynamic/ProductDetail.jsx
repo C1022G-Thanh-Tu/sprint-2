@@ -5,36 +5,29 @@ import productService from "../../service/productService";
 import carDetailService from "../../service/carDetailService";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { addCartDetailAction } from "../../redux/action/CartDetail/cartDetailsAction";
+import { useDispatch } from "react-redux";
 
 function ProductDetail() {
   const [product, setProduct] = useState();
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const param = useParams();
+  const dispatch = useDispatch();
+  const name = localStorage.getItem("name");
 
   const handleChangeQuantity = (e) => {
     setQuantity(+e.target.value);
   };
 
-  const handleAddCartDetail = async (productId, productPrice) => {
-    try {
-      if (quantity === 0) {
-        toast.warn("Hãy chọn số lượng sản phẩm");
-      } else {
-        await carDetailService.save({
-          quantity: quantity,
-          productDTO: { id: productId },
-          total: productPrice,
-        });
-        toast.success("Thêm mới thành công");
-      }
-    } catch (error) {
-      console.warn(error);
-      const errMsg = error.response.data;
-      if (errMsg === "Số lượng không đủ") {
-        toast.warn("Số lượng sản phẩm không đủ");
-      }
-    }
+  const handleAddCartDetail = (productId, productPrice) => {
+    dispatch(
+      addCartDetailAction({
+        quantity: quantity,
+        productDTO: { id: productId },
+        total: productPrice,
+      }, name)
+    );
   };
 
   useEffect(() => {
@@ -46,6 +39,7 @@ function ProductDetail() {
         console.warn(error);
       }
     };
+
     getProducts();
   }, []);
 
@@ -54,6 +48,7 @@ function ProductDetail() {
       const productResponse = await productService.findById(param.id);
       setProduct(productResponse.data);
     };
+    
     getProduct();
   }, [param.id]);
 
