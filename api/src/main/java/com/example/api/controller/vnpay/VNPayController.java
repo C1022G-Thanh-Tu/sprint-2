@@ -4,14 +4,12 @@ import com.example.api.config.VNPayConfig;
 import com.example.api.dto.payment.PaymentReqDTO;
 import com.example.api.dto.payment.PaymentResDTO;
 import com.example.api.dto.payment.PaymentSendEmailDTO;
-import com.example.api.dto.payment.TransactionStatusDTO;
 import com.example.api.service.vnpay.impl.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -27,12 +25,8 @@ public class VNPayController {
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping("/create_payment")
     public ResponseEntity<?> createPayment (@RequestBody PaymentReqDTO paymentReqDTO) throws UnsupportedEncodingException {
-//        String orderType = req.getParameter("ordertype");
-//        String bankCode = req.getParameter("bankCode");
-
         long amount = paymentReqDTO.getAmount()*100;
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
-//        String vnp_IpAddr = VNPayConfig.getIpAddress(req);
         String vnp_TmnCode = VNPayConfig.vnp_TmnCode;
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -46,16 +40,6 @@ public class VNPayController {
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
-//        vnp_Params.put("vnp_OrderType", orderType);
-//
-//        String locate = req.getParameter("language");
-//        if (locate != null && !locate.isEmpty()) {
-//            vnp_Params.put("vnp_Locale", locate);
-//        } else {
-//            vnp_Params.put("vnp_Locale", "vn");
-//        }
-//        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
-//        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -109,24 +93,4 @@ public class VNPayController {
         vnPayService.sendEmail(paymentSendEmailDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-//    @GetMapping("/payment-info")
-//    public ResponseEntity<?> transaction (
-//            @RequestParam(value = "vnp_Amount") String amount,
-//            @RequestParam(value = "vnp_BankCode") String bankCode,
-//            @RequestParam(value = "vnp_OrderInfo") String order,
-//            @RequestParam(value = "vnp_ResponseCode") String responseCode
-//    ) {
-//        TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
-//        if (responseCode.equals("00")) {
-//            transactionStatusDTO.setStatus("OK");
-//            transactionStatusDTO.setMsg("Thành công");
-//            transactionStatusDTO.setData("");
-//        } else {
-//            transactionStatusDTO.setStatus("NO");
-//            transactionStatusDTO.setMsg("Thất bại");
-//            transactionStatusDTO.setData("");
-//        }
-//        return new ResponseEntity<>(transactionStatusDTO, HttpStatus.OK);
-//    }
 }

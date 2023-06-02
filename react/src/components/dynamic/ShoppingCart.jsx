@@ -64,7 +64,7 @@ function ShoppingCart() {
     if (cartDetails.length !== 0) {
       dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id))
     }
-  }, 60 * 60 * 1000);
+  }, 30 * 60 * 1000);
 
   const handleTransferInfo = (deletedObject) => {
     setDeletedObject((prev) => ({ ...prev, ...deletedObject }));

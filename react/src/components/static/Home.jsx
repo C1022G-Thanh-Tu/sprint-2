@@ -188,6 +188,103 @@ function Home() {
           </p>
         </div>
       </div>
+      <div className="text-center mt-4">
+        <a
+          href="https://chanhviet.com/wp-content/uploads/2019/11/Catalogue-Chanh-Viet-2019.pdf"
+          target={"blank"}
+          className="catalog-btn pe-5 ps-5"
+        >
+          <span>CATALOG</span>
+        </a>
+      </div>
+
+      <div className="mt-3 container pt-5" style={{ maxWidth: "1100px" }}>
+        <div className="row d-flex justify-content-between">
+          <div className="col-4">
+            <div
+              className="me-2 ms-2"
+              style={{ border: "1px solid rgb(0 0 0 / 10%)" }}
+            >
+              <img
+                src="https://chanhviet.com/wp-content/uploads/2019/11/cau-chuyen-chavi.png"
+                className="w-100"
+                alt=""
+              />
+              <h4 className="ps-3 pe-3 mt-3">Câu chuyện CHAVI</h4>
+              <p className="ps-3 pe-3">
+                Trải qua một thập kỷ gắn bó với cây chanh và xây dựng giá trị
+                cho nông sản Việt, Công ty Chanh Việt đã đạt nhiều giấy khen
+                trong và ngoài nước…Những thành quả này đã tiếp thêm động lực
+                cho toàn thể Công ty Chanh Việt vững tin hơn trên hành trình
+                nâng cao giá trị nông sản việt, mang đến các sản phẩm sạch và tử
+                tế từ nhãn hiệu CHAVI đến với người tiêu dùng trong nước và quốc
+                tế…
+              </p>
+              <Link
+                to={"/story"}
+                className="see-more ps-3 pe-3 mb-3 d-block text-black"
+                style={{ textDecoration: "none" }}
+              >
+                Xem thêm <i className="bi bi-arrow-right"></i>
+              </Link>
+            </div>
+          </div>
+
+          <div className="col-4">
+            <div
+              className="me-2 ms-2"
+              style={{ border: "1px solid rgb(0 0 0 / 10%)" }}
+            >
+              <img
+                src="https://chanhviet.com/wp-content/uploads/2019/10/van-hoa-cha-vi.jpg"
+                className="w-100"
+                alt=""
+              />
+              <h4 className="ps-3 pe-3 mt-3">Văn hóa CHAVI</h4>
+              <p className="ps-3 pe-3">
+                Con người CHAVI tử tế trong suy nghĩ và cách hành xử đối với
+                cộng đồng và xã hội, tích cực trong tư duy và hành động, luôn
+                mang trong mình trách nhiệm đối với xã hội thông qua các hoạt
+                động từ thiện và bảo vệ môi trường.
+              </p>
+              <a
+                href="#"
+                className="see-more ps-3 pe-3 mb-3 d-block text-black"
+                style={{ textDecoration: "none" }}
+              >
+                Xem thêm <i className="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div className="col-4">
+            <div
+              className="me-2 ms-2"
+              style={{ border: "1px solid rgb(0 0 0 / 10%)" }}
+            >
+              <img
+                src="https://chanhviet.com/wp-content/uploads/2019/10/he-thong-quan-tri.jpg"
+                className="w-100"
+                alt=""
+              />
+              <h4 className="ps-3 pe-3 mt-3">Hệ thống quản trị</h4>
+              <p className="ps-3 pe-3">
+                Sơ đồ tổ chức của CHAVI được thể hiện một cách chuyên nghiệp và
+                phân bổ phòng ban một cách khoa học và hợp lý. Đảm bảo phân cấp
+                cụ thể trách nhiệm của mỗi thành viên và phòng ban trong Công Ty
+                Cp Thương Mại và Đầu Tư Chanh Việt.
+              </p>
+              <a
+                href="#"
+                className="see-more ps-3 pe-3 mb-3 d-block text-black"
+                style={{ textDecoration: "none" }}
+              >
+                Xem thêm <i className="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div style={{ backgroundColor: "rgb(247, 247, 247)" }} className="mt-5">
         <div
@@ -309,6 +406,68 @@ function Home() {
                 width="100%"
               />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3 container pt-5 pb-5" style={{ maxWidth: "1100px" }}>
+        <div className="row">
+          <div className="col-6">
+            <iframe
+              width="100%"
+              height="300px"
+              src="https://www.youtube.com/embed/R41byKXUIMg"
+              title="NÔNG TRẠI CHANH VIỆT - NÔNG TRẠI CHANH LỚN NHẤT VIỆT NAM - TỰ HÀO CHANH VIỆT"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div className="col-6 ps-4">
+            <h3 className="contact-title mb-3">LIÊN HỆ VỚI CHÚNG TÔI</h3>
+            <div className="row mb-3">
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Họ và tên của bạn*"
+                />
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Email của bạn*"
+                />
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Điện thoại*"
+                />
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Tiêu đề*"
+                />
+              </div>
+            </div>
+            <div className="row mb-3">
+              <div className="col-12">
+                <textarea
+                  className="form-control"
+                  placeholder="Nội dung liên hệ*"
+                />
+              </div>
+            </div>
+            <button className="btn-submit rounded-pill text-light">
+              Gửi đi
+            </button>
           </div>
         </div>
       </div>

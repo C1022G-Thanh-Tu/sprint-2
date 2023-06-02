@@ -82,7 +82,8 @@ html {
   right: 0;
 }
 
-.detail-btn {
+.detail-btn,
+.catalog-btn {
   border-radius: 4px;
   background-color: #12ac4c;
   border: none;
@@ -97,17 +98,20 @@ html {
   border-radius: 40px;
 }
 
-.detail-btn:hover {
+.detail-btn:hover,
+.catalog-btn:hover {
   background-color: #f4511e;
   color: #ffffff;
 }
 
-.detail-btn span {
+.detail-btn span,
+.catalog-btn span {
   cursor: pointer;
   display: inline-block;
   position: relative;
   transition: 0.5s;
 }
+
 
 .detail-btn span:after {
   content: "\00bb";
@@ -118,13 +122,30 @@ html {
   transition: 0.5s;
 }
 
-.detail-btn:hover span {
+.catalog-btn span:after {
+  content: "\2193";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+
+.detail-btn:hover span,
+.catalog-btn:hover span {
   padding-right: 25px;
 }
 
-.detail-btn:hover span:after {
+.detail-btn:hover span:after,
+.catalog-btn:hover span:after {
   opacity: 1;
   right: 0;
+}
+
+.see-more:hover {
+  color: #f4511e !important;
+  transition: ease 0.3s;
 }
 
 .entry-header {
