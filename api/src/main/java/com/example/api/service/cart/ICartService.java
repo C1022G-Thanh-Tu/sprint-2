@@ -4,4 +4,5 @@ import com.example.api.dto.cart.CartDTO;
 
 public interface ICartService {
     void update(CartDTO cartDTO);
+    void deletePermanent(Integer id);
 }

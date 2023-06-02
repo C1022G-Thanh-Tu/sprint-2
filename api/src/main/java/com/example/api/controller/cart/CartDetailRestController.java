@@ -31,22 +31,22 @@ public class CartDetailRestController {
 
     @GetMapping("")
     public ResponseEntity<List<CartDetailDTO>> listAll(@RequestParam(required = false, defaultValue = "") String customerName) {
-        List<CartDetailDTO> cartDetailDTOS = icartDetailService.findAll(customerName);
-        if (cartDetailDTOS.isEmpty()) {
-            return new ResponseEntity<>(cartDetailDTOS, HttpStatus.NO_CONTENT);
+        List<CartDetailDTO> cartDetailDTOList = icartDetailService.findAll(customerName);
+        if (cartDetailDTOList.isEmpty()) {
+            return new ResponseEntity<>(cartDetailDTOList, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(cartDetailDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/list")
     public ResponseEntity<Page<CartDetailDTO>> listTotalAll(
             @RequestParam(required = false, defaultValue = "") String customerName,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 3) Pageable pageable) {
-        Page<CartDetailDTO> cartDetailDTOS = icartDetailService.findTotalAll(customerName, pageable);
-        if (cartDetailDTOS.isEmpty()) {
-            return new ResponseEntity<>(cartDetailDTOS, HttpStatus.BAD_REQUEST);
+        Page<CartDetailDTO> cartDetailDTOPage = icartDetailService.findTotalAll(customerName, pageable);
+        if (cartDetailDTOPage.isEmpty()) {
+            return new ResponseEntity<>(cartDetailDTOPage, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(cartDetailDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(cartDetailDTOPage, HttpStatus.OK);
     }
 
     @PostMapping("")

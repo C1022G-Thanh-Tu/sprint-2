@@ -70,17 +70,19 @@ public class CartDetailService implements ICartDetailService {
 
         product.setQuantity(product.getQuantity() - cartDetail.getQuantity());
         productRepository.save(product);
-        List<CartDetail> cartDetails = cartDetailRepository.findAll();
-        if (cartDetails.isEmpty()) {
+
+        List<CartDetail> cartDetailList = cartDetailRepository.findAll();
+
+        if (cartDetailList.isEmpty()) {
             cartDetailRepository.save(cartDetail);
             count++;
             return "";
         }
 
-        for (int i = cartDetails.size() - 1; i >= 0; i--) {
-            if (count != 0 && cartDetails.get(i).getProduct().equals(product)  && !cartDetails.get(i).isDelete()) {
-                cartDetails.get(i).setQuantity(cartDetails.get(i).getQuantity() + cartDetailDTO.getQuantity());
-                cartDetailRepository.save(cartDetails.get(i));
+        for (int i = cartDetailList.size() - 1; i >= 0; i--) {
+            if (count != 0 && cartDetailList.get(i).getProduct().equals(product)  && !cartDetailList.get(i).isDelete()) {
+                cartDetailList.get(i).setQuantity(cartDetailList.get(i).getQuantity() + cartDetailDTO.getQuantity());
+                cartDetailRepository.save(cartDetailList.get(i));
                 return "";
             }
         }
@@ -120,16 +122,18 @@ public class CartDetailService implements ICartDetailService {
 
     @Override
     public List<CartDetailDTO> findAll(String customerName) {
-        List<CartDetail> cartDetails = cartDetailRepository.findAllIsDeleteFalse(customerName);
-        List<CartDetailDTO> cartDetailDTOS = new ArrayList<>();
+        List<CartDetail> cartDetailList = cartDetailRepository.findAllIsDeleteFalse(customerName);
+        List<CartDetailDTO> cartDetailDTOList = new ArrayList<>();
         CartDetailDTO cartDetailDTO;
-        for (CartDetail cartDetail: cartDetails) {
+        for (CartDetail cartDetail: cartDetailList) {
             cartDetailDTO = new CartDetailDTO();
+            cartDetailDTO.setCartDTO(new CartDTO());
+            BeanUtils.copyProperties(cartDetail.getCart(), cartDetailDTO.getCartDTO());
             cartDetailDTO.setProductDTO(productService.findById(cartDetail.getProduct().getId()));
             BeanUtils.copyProperties(cartDetail, cartDetailDTO);
-            cartDetailDTOS.add(cartDetailDTO);
+            cartDetailDTOList.add(cartDetailDTO);
         }
-        return cartDetailDTOS;
+        return cartDetailDTOList;
     }
 
     @Override
@@ -145,17 +149,17 @@ public class CartDetailService implements ICartDetailService {
 
     @Override
     public Page<CartDetailDTO> findTotalAll(String customerName, Pageable pageable) {
-        Page<CartDetail> cartDetails = cartDetailRepository.findTotalAll(customerName, pageable);
-        List<CartDetailDTO> cartDetailDTOS = new ArrayList<>();
+        Page<CartDetail> cartDetailPage = cartDetailRepository.findTotalAll(customerName, pageable);
+        List<CartDetailDTO> cartDetailDTOList = new ArrayList<>();
         CartDetailDTO cartDetailDTO;
-        for (CartDetail cartDetail: cartDetails) {
+        for (CartDetail cartDetail: cartDetailPage) {
             cartDetailDTO = new CartDetailDTO();
             cartDetailDTO.setCartDTO(new CartDTO());
             BeanUtils.copyProperties(cartDetail.getCart(), cartDetailDTO.getCartDTO());
             cartDetailDTO.setProductDTO(productService.findById(cartDetail.getProduct().getId()));
             BeanUtils.copyProperties(cartDetail, cartDetailDTO);
-            cartDetailDTOS.add(cartDetailDTO);
+            cartDetailDTOList.add(cartDetailDTO);
         }
-        return new PageImpl<>(cartDetailDTOS, pageable, cartDetails.getTotalElements());
+        return new PageImpl<>(cartDetailDTOList, pageable, cartDetailPage.getTotalElements());
     }
 }

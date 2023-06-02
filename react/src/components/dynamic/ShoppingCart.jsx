@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import cartDetailService from "../../service/carDetailService";
 import ModalDeleteCartDetail from "../../util/ModalDeleteCartDetail";
 import Swal from "sweetalert2";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import paymentService from "../../service/paymentService";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import {
   deleteCartDetailAction,
   increaseQuantityCartAction,
   setCartsAction,
+  deletePermanentCartDetailAction
 } from "../../redux/action/CartDetail/cartDetailsAction";
 
 function ShoppingCart() {
@@ -60,6 +60,12 @@ function ShoppingCart() {
     }
   };
 
+  setTimeout(() => {
+    if (cartDetails.length !== 0) {
+      dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id))
+    }
+  }, 60 * 60 * 1000);
+
   const handleTransferInfo = (deletedObject) => {
     setDeletedObject((prev) => ({ ...prev, ...deletedObject }));
   };
@@ -71,6 +77,10 @@ function ShoppingCart() {
   useEffect(() => {
     dispatch(setCartsAction(name));
   }, [dispatch, name]);
+
+  useEffect(() => {
+    document.title = "Giỏ hàng";
+  }, []);
 
   return (
     <>

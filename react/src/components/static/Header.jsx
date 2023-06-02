@@ -13,6 +13,8 @@ function Header() {
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
     localStorage.removeItem("name");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
     navigate("/");
   };
 

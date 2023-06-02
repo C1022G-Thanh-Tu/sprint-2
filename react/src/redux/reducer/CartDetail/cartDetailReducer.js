@@ -3,6 +3,7 @@ import {
   DECREASE_QUANTITY_ACTION,
   INCREASE_QUANTITY_ACTION,
   DELETE_ACTION,
+  DELETE_PERMANENT_ACTION,
   ADD_ACTION,
 } from "../../action/CartDetail/types";
 
@@ -17,45 +18,51 @@ const cartDetailReducer = (state = initialState, action) => {
       return action.payload;
 
     case DELETE_ACTION: {
-      const newCarts = state.filter((cart) => {
-        return cart.id !== action.payload;
+      const newCartDetails = state.filter((cartDetail) => {
+        return cartDetail.id !== action.payload;
       });
 
-      return newCarts;
+      return newCartDetails;
     }
 
     case INCREASE_QUANTITY_ACTION: {
-      const newCarts = state.map((cart) => {
-        if (cart.id === action.payload) {
+      const newCartDetails = state.map((cartDetail) => {
+        if (cartDetail.id === action.payload) {
           return {
-            ...cart,
-            quantity: cart.quantity + 1,
+            ...cartDetail,
+            quantity: cartDetail.quantity + 1,
           };
         }
 
-        return cart;
+        return cartDetail;
       });
 
-      return newCarts;
+      return newCartDetails;
     }
 
     case DECREASE_QUANTITY_ACTION: {
-      console.log(action);
-      console.log(state);
-      const newCarts = state
-        .map((cart) => {
-          if (cart.id === action.payload) {
+      const newCartDetails = state
+        .map((cartDetail) => {
+          if (cartDetail.id === action.payload) {
             return {
-              ...cart,
-              quantity: cart.quantity - 1,
+              ...cartDetail,
+              quantity: cartDetail.quantity - 1,
             };
           }
 
-          return cart;
+          return cartDetail;
         })
-        .filter((cart) => cart.quantity > 0);
+        .filter((cartDetail) => cartDetail.quantity > 0);
 
-      return newCarts;
+      return newCartDetails;
+    }
+
+    case DELETE_PERMANENT_ACTION: {
+      const newCartDetails = state.filter((cartDetail) => {
+        return cartDetail.cartDTO.id !== action.payload;
+      });
+
+      return newCartDetails;
     }
 
     default:

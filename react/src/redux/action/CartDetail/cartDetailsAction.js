@@ -3,9 +3,11 @@ import {
   DECREASE_QUANTITY_ACTION,
   INCREASE_QUANTITY_ACTION,
   DELETE_ACTION,
+  DELETE_PERMANENT_ACTION,
   ADD_ACTION
 } from "./types";
 import cartDetailService from "../../../service/carDetailService";
+import cartService from "../../../service/cartService"
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
@@ -85,3 +87,14 @@ export const addCartDetailAction = (cartDetail, name) => async (dispatch) => {
   }
 };
 
+export const deletePermanentCartDetailAction = (id) => async (dispatch) => {
+  try {
+    await cartService.remove(id);
+    dispatch({
+      type: DELETE_PERMANENT_ACTION,
+      payload: id,
+    });
+  } catch (error) {
+    console.warn(error);
+  }
+};
