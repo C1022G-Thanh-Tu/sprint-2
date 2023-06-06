@@ -103,7 +103,6 @@ public class CartDetailService implements ICartDetailService {
         productRepository.save(product);
         if (cartDetail.getQuantity() + quantity <= 0) {
             delete(id);
-            return "Lỗi";
         }
         cartDetail.setQuantity(cartDetail.getQuantity() + quantity);
         cartDetailRepository.save(cartDetail);
@@ -117,6 +116,7 @@ public class CartDetailService implements ICartDetailService {
         Product product = productRepository.findById(cartDetail.getProduct().getId()).get();
         product.setQuantity(product.getQuantity() + cartDetail.getQuantity());
         productRepository.save(product);
+        cartDetail.setQuantity(0);
         cartDetailRepository.save(cartDetail);
     }
 

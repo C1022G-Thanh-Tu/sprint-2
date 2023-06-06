@@ -60,12 +60,6 @@ function ShoppingCart() {
     }
   };
 
-  setTimeout(() => {
-    if (cartDetails.length !== 0) {
-      dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id))
-    }
-  }, 30 * 60 * 1000);
-
   const handleTransferInfo = (deletedObject) => {
     setDeletedObject((prev) => ({ ...prev, ...deletedObject }));
   };
@@ -73,6 +67,18 @@ function ShoppingCart() {
   const handleDelete = () => {
     dispatch(deleteCartDetailAction(deletedObject.deletedId))
   }
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (cartDetails.length !== 0) {
+        dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id))
+      }
+    }, 30 * 60 * 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [total]);
 
   useEffect(() => {
     dispatch(setCartsAction(name));

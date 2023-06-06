@@ -19,6 +19,6 @@ public interface ICartDetailRepository extends JpaRepository<CartDetail, Integer
     List<CartDetail> findAllIsDeleteFalse(@Param("customerName") String customerName);
 
     @Query(value = "select * from cart_detail cd join cart c on cd.cart_id = c.id " +
-            "where cd.is_delete = true and cd.is_delete = true and c.customer_name=:customerName", nativeQuery = true)
+            "where cd.quantity > 0 and cd.is_delete = true and cd.is_delete = true and c.customer_name=:customerName", nativeQuery = true)
     Page<CartDetail> findTotalAll(@Param("customerName") String customerName, Pageable pageable);
 }

@@ -291,7 +291,6 @@ function UserProfileEdit() {
                         <tbody>
                           <tr>
                             <th className="th-dieucosmetics"></th>
-
                             <td>
                               <button
                                 type="submit"

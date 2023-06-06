@@ -77,7 +77,7 @@ function ProductDetail() {
                   <h1 style={{ fontSize: "24px", color: "#12ac4c" }}>
                     {product.name}
                   </h1>
-                  <p className="price fs-5">
+                  <p className="price fs-3">
                     <b>
                       {product.price.toLocaleString("vi-VN", {
                         style: "currency",
@@ -92,7 +92,8 @@ function ProductDetail() {
                     <div className="d-flex align-items-center mb-3 gap-2">
                       <input
                         type="number"
-                        style={{ width: 50 }}
+                        className="form-control"
+                        style={{ width: 70 }}
                         min={0}
                         value={quantity}
                         onChange={(e) => handleChangeQuantity(e)}
@@ -134,7 +135,7 @@ function ProductDetail() {
 
             <div className="col-4">
               <h1 style={{ fontSize: "24px" }} className="text-center">
-                SẢN PHẨM TƯƠNG TỰ
+                SẢN PHẨM MỚI NHẤT
               </h1>
 
               <div className="holder d-flex justify-content-center align-items-center flex-column">

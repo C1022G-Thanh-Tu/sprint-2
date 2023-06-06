@@ -418,7 +418,7 @@ function Home() {
               height="300px"
               src="https://www.youtube.com/embed/R41byKXUIMg"
               title="NÔNG TRẠI CHANH VIỆT - NÔNG TRẠI CHANH LỚN NHẤT VIỆT NAM - TỰ HÀO CHANH VIỆT"
-              frameborder="0"
+              frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen
             ></iframe>

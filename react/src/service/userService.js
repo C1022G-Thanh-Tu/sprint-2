@@ -2,11 +2,14 @@ import request from "../config/request";
 
 const getUserDetail = () => {
   const token = localStorage.getItem("token");
-  return request.get("/user/detail", {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-  });
+  if (token) {
+    return request.get("/user/detail", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    });
+  }
+
 };
 
 const updateUserDetail = (user) => {
