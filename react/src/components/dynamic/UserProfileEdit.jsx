@@ -291,10 +291,19 @@ function UserProfileEdit() {
                         <tbody>
                           <tr>
                             <th className="th-dieucosmetics"></th>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th className="th-dieucosmetics"></th>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <th className="th-dieucosmetics"></th>
                             <td>
                               <button
                                 type="submit"
-                                className="btn btn-outline-primary mt-4"
+                                className="btn btn-outline-primary"
+                                style={{marginTop: '42px'}}
                               >
                                 Lưu thông tin
                               </button>
