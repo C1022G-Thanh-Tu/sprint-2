@@ -4,6 +4,7 @@ function Story() {
   useEffect(() => {
     document.title = "Giới thiệu";
   }, []);
+  
   return (
     <>
       <div className="wrapper_inner_banner">

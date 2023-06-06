@@ -4,6 +4,7 @@ function Contact() {
   useEffect(() => {
     document.title = "Liên hệ";
   }, []);
+  
   return (
     <>
       <div className="wrapper_inner_banner">
