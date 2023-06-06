@@ -48,6 +48,7 @@ function CartDetails() {
       </h2>
       {cartDetails.length !== 0 ? (
         <div className="container mt-2">
+          <div className="table-responsive p-0"></div>
           <table className="table mt-5">
             <thead>
               <tr>

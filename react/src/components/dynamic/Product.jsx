@@ -79,7 +79,7 @@ function Product() {
           <div className="wpb_wrapper">
             <h2
               style={{ color: "#12ac4c", textAlign: "center" }}
-              className="mt-3"
+              className="mt-4 mb-3"
             >
               Sản phẩm CHAVI
             </h2>
@@ -128,11 +128,11 @@ function Product() {
                   </div>
                   <div className="action-button">
                     <span className="view_details_button">
-                      <i className="bi bi-eye pe-2"></i>
                       <Link
                         to={`/product-detail/${product.id}`}
                         className="button-detail"
                       >
+                      <i className="bi bi-eye pe-2"></i>
                         <span className="d-none d-sm-inline">Chi tiết</span>
                       </Link>
                     </span>

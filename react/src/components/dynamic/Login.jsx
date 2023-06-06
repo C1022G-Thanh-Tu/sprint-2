@@ -7,7 +7,6 @@ import loginStyle from "../../loginStyle.module.css";
 import { RotatingLines } from "react-loader-spinner";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
-import { GOOGLE_AUTH_URL } from "../constants/constants";
 
 function Login() {
   const [showOtpModal, setShowOtpModal] = useState(false);
@@ -591,7 +590,7 @@ function Login() {
                           onClick={() => {
                             setShowNewPassword(!showNewPassword);
                           }}
-                          className={`bi bi-eye-slash-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                          className="bi bi-eye-slash-fill position-absolute top-50 translate-middle-y me-2 end-0"
                         ></i>
                       ) : (
                         <i
@@ -599,7 +598,7 @@ function Login() {
                           onClick={() => {
                             setShowNewPassword(!showNewPassword);
                           }}
-                          className={`bi bi-eye-fill me-2 position-absolute top-50 translate-middle-y end-0`}
+                          className="bi bi-eye-fill position-absolute top-50 translate-middle-y me-2 end-0"
                         ></i>
                       )}
                     </div>

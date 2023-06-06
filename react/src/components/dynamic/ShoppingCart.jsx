@@ -251,7 +251,7 @@ function ShoppingCart() {
                         </div>
                         <div className="d-flex justify-content-between">
                           <h5 className="text-uppercase mb-3">
-                            Phí giao hàng:{" "}
+                            Phí giao hàng:
                           </h5>
                           <h5 className="mb-4 pb-2">Miễn phí</h5>
                         </div>
@@ -282,6 +282,7 @@ function ShoppingCart() {
           </div>
         </div>
       </section>
+      
       <ToastContainer />
 
       <ModalDeleteCartDetail
