@@ -16,6 +16,7 @@ import PaymentResult from "./components/dynamic/PaymentResult";
 import CartDetails from "./components/dynamic/PurchasedCartDetails";
 import UserProfile from "./components/dynamic/UserProfile";
 import UserProfileEdit from "./components/dynamic/UserProfileEdit";
+import AdministrationSystem from "./components/static/AdministrationSystem";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/story" element={<Story />} />
+            <Route path="/administration" element={<AdministrationSystem />} />
             <Route path="/product" element={<Product />} />
             <Route path="/product-detail/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<ShoppingCart />} />

@@ -274,13 +274,13 @@ function Home() {
                 cụ thể trách nhiệm của mỗi thành viên và phòng ban trong Công Ty
                 Cp Thương Mại và Đầu Tư Chanh Việt.
               </p>
-              <a
+              <Link to={"/administration"}
                 href="#"
                 className="see-more ps-3 pe-3 mb-3 d-block text-black"
                 style={{ textDecoration: "none" }}
               >
                 Xem thêm <i className="bi bi-arrow-right"></i>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

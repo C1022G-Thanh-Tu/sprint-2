@@ -143,6 +143,11 @@ function Header() {
                       Quá trình phát triển
                     </a>
                   </li>
+                  <li>
+                    <NavLink to={"/administration"} className="dropdown-item">
+                      Hệ thống quản trị
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
               <li className="nav-item flex-1 pe-5">
