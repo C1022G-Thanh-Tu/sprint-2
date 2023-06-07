@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import SimpleSlider from "../../util/SimpleSlider";
 import productService from "../../service/productService";
-import carDetailService from "../../service/carDetailService";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addCartDetailAction } from "../../redux/action/CartDetail/cartDetailsAction";
 import { useDispatch } from "react-redux";
@@ -12,6 +11,8 @@ function ProductDetail() {
   const [product, setProduct] = useState();
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState(0);
+  const [isAdd, setIsAdd] = useState(false);
+
   const param = useParams();
   const dispatch = useDispatch();
   const name = localStorage.getItem("name");
@@ -22,12 +23,17 @@ function ProductDetail() {
 
   const handleAddCartDetail = (productId, productPrice) => {
     dispatch(
-      addCartDetailAction({
-        quantity: quantity,
-        productDTO: { id: productId },
-        total: productPrice,
-      }, name)
+      addCartDetailAction(
+        {
+          quantity: quantity,
+          productDTO: { id: productId },
+          total: productPrice,
+        },
+        name
+      )
     );
+    const newIsAdd = { ...isAdd };
+    setIsAdd(newIsAdd);
   };
 
   useEffect(() => {
@@ -48,13 +54,9 @@ function ProductDetail() {
       const productResponse = await productService.findById(param.id);
       setProduct(productResponse.data);
     };
-    
-    getProduct();
-  }, [param.id]);
 
-  if (!product) {
-    return null;
-  }
+    getProduct();
+  }, [param.id, isAdd]);
 
   return (
     <>
@@ -71,15 +73,15 @@ function ProductDetail() {
             <div className="col-lg-8 col-md-8 col-sm-7 col-xs-12 pull-left">
               <div className="row">
                 <div className="col-6 p-0">
-                  <SimpleSlider imgList={product.productImgDTOS} />
+                  <SimpleSlider imgList={product?.productImgDTOS} />
                 </div>
                 <div className="col-6 p-0">
                   <h1 style={{ fontSize: "24px", color: "#12ac4c" }}>
-                    {product.name}
+                    {product?.name}
                   </h1>
                   <p className="price fs-3">
                     <b>
-                      {product.price.toLocaleString("vi-VN", {
+                      {product?.price.toLocaleString("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       })}
@@ -87,7 +89,7 @@ function ProductDetail() {
                   </p>
                   <div className="description" style={{ textAlign: "justify" }}>
                     <div
-                      dangerouslySetInnerHTML={{ __html: product.description }}
+                      dangerouslySetInnerHTML={{ __html: product?.description }}
                     ></div>
                     <div className="d-flex align-items-center mb-3 gap-2">
                       <input
@@ -101,13 +103,13 @@ function ProductDetail() {
                       <button
                         className="btn btn-success rounded-pill"
                         onClick={() =>
-                          handleAddCartDetail(product.id, product.price)
+                          handleAddCartDetail(product?.id, product?.price)
                         }
                       >
                         Thêm vào giỏ hàng
                       </button>
-                      {product.quantity <= 10 ? (
-                        <span>(Còn {product.quantity} sản phẩm)</span>
+                      {product?.quantity <= 10 ? (
+                        <span>(Còn {product?.quantity} sản phẩm)</span>
                       ) : (
                         <></>
                       )}
@@ -139,11 +141,11 @@ function ProductDetail() {
               </h1>
 
               <div className="holder d-flex justify-content-center align-items-center flex-column">
-                {products.map((product, index) => (
+                {products?.map((product, index) => (
                   <div className="product-data text-center mb-3" key={index}>
                     <div className="product-image">
                       <img
-                        src={product.productImgDTOS[0].url}
+                        src={product?.productImgDTOS[0].url}
                         alt=""
                         width={100}
                         height={100}
@@ -152,7 +154,7 @@ function ProductDetail() {
                     <div className="action-button">
                       <span className="view_details_button">
                         <Link
-                          to={`/product-detail/${product.id}`}
+                          to={`/product-detail/${product?.id}`}
                           className="button-detail"
                         >
                           <i className="bi bi-eye"></i>
@@ -176,11 +178,11 @@ function ProductDetail() {
                           lineHeight: "22px",
                         }}
                       >
-                        {product.name}
+                        {product?.name}
                       </h2>
                       <span>
                         <b>
-                          {product.price.toLocaleString("vi-VN", {
+                          {product?.price.toLocaleString("vi-VN", {
                             style: "currency",
                             currency: "VND",
                           })}

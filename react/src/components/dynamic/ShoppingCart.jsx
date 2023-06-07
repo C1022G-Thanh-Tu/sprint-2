@@ -11,7 +11,7 @@ import {
   deleteCartDetailAction,
   increaseQuantityCartAction,
   setCartsAction,
-  deletePermanentCartDetailAction
+  deletePermanentCartDetailAction,
 } from "../../redux/action/CartDetail/cartDetailsAction";
 
 function ShoppingCart() {
@@ -30,7 +30,14 @@ function ShoppingCart() {
   }, 0);
 
   const handlePayment = async () => {
-    if (!role) {
+    if (total === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Chưa có sản phẩm trong giỏ hàng",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else if (!role) {
       Swal.fire({
         title: "Thông báo",
         text: "Bạn phải đăng nhập để thực hiện thanh toán",
@@ -42,13 +49,6 @@ function ShoppingCart() {
         if (result.isConfirmed) {
           navigate("/login");
         }
-      });
-    } else if (total === 0) {
-      Swal.fire({
-        icon: "error",
-        title: "Chưa có sản phẩm trong giỏ hàng",
-        showConfirmButton: false,
-        timer: 1500,
       });
     } else {
       try {
@@ -65,13 +65,13 @@ function ShoppingCart() {
   };
 
   const handleDelete = () => {
-    dispatch(deleteCartDetailAction(deletedObject.deletedId))
-  }
+    dispatch(deleteCartDetailAction(deletedObject.deletedId));
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (cartDetails.length !== 0) {
-        dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id))
+        dispatch(deletePermanentCartDetailAction(cartDetails[0]?.cartDTO.id));
       }
     }, 30 * 60 * 1000);
 
@@ -282,7 +282,7 @@ function ShoppingCart() {
           </div>
         </div>
       </section>
-      
+
       <ToastContainer />
 
       <ModalDeleteCartDetail

@@ -43,7 +43,7 @@ public class EmailService implements IEmailService{
                     + "<br>"
                     + "<br>"
                     + "Trân trọng," +
-                    "<div style =\"color:#183661; font-size:20px ; font-weight:bold\">Fashion Shop</div>" +
+                    "<div style =\"color:#12ac4c; font-size:20px ; font-weight:bold\">ChanhViet Garden</div>" +
                     "</div>" +
                     "</body>" +
                     "</html>", true);

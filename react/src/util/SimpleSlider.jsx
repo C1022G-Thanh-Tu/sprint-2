@@ -17,7 +17,7 @@ export default function SimpleSlider(props) {
   return (
     <div>
       <Slider asNavFor={nav2} ref={slider1}>
-        {props.imgList.map((img, index) => (
+        {props.imgList?.map((img, index) => (
           <div key={index}>
             <img src={img.url} alt="" width={"90%"} style={{height:'400px'}} />
           </div>
@@ -31,7 +31,7 @@ export default function SimpleSlider(props) {
         swipeToSlide={true}
         focusOnSelect={true}
       >
-        {props.imgList.map((img, index) => (
+        {props.imgList?.map((img, index) => (
           <div key={index}>
             <img src={img.url} alt="" width={"60%"} style={{height: '90px'}}/>
           </div>
