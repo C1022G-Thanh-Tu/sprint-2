@@ -15,11 +15,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService {
     @Autowired
     private IProductRepository productRepository;
+    public ProductDTO mapProductDTO (Product product){
+        ProductDTO productDTO = new ProductDTO();
+        copyProductToProductDTO(product, productDTO);
+        return productDTO;
+    }
     public void setValueOfProductImgSet(Set<ProductImg> productImgs, Set<ProductImgDTO> productImgDTOS) {
         ProductImgDTO productImgDTO;
         for (ProductImg productImg: productImgs) {
@@ -39,15 +45,9 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<ProductDTO> findByName(Pageable pageable, String name) {
-        Page<Product> products = productRepository.findProductsByNameContaining(pageable, name);
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        ProductDTO productDTO;
-        for (Product product: products) {
-            productDTO = new ProductDTO();
-            copyProductToProductDTO(product, productDTO);
-            productDTOS.add(productDTO);
-        }
-        return new PageImpl<>(productDTOS, pageable, products.getTotalElements());
+        Page<Product> productPage = productRepository.findProductsByNameContaining(pageable, name);
+        List<ProductDTO> productDTOS = productPage.stream().map(this::mapProductDTO).collect(Collectors.toList());
+        return new PageImpl<>(productDTOS, pageable, productPage.getTotalElements());
     }
 
     @Override
@@ -60,14 +60,8 @@ public class ProductService implements IProductService {
 
     @Override
     public Page<ProductDTO> findAll(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        ProductDTO productDTO;
-        for (Product product: products) {
-            productDTO = new ProductDTO();
-            copyProductToProductDTO(product, productDTO);
-            productDTOS.add(productDTO);
-        }
-        return new PageImpl<>(productDTOS, pageable, products.getTotalElements());
+        Page<Product> productPage = productRepository.findAll(pageable);
+        List<ProductDTO> productDTOList = productPage.stream().map(this::mapProductDTO).collect(Collectors.toList());
+        return new PageImpl<>(productDTOList, pageable, productPage.getTotalElements());
     }
 }

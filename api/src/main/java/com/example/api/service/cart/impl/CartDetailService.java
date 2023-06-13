@@ -17,10 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CartDetailService implements ICartDetailService {
@@ -33,9 +35,11 @@ public class CartDetailService implements ICartDetailService {
     @Autowired
     private IProductRepository productRepository;
     Integer count = 0;
+
     public void resetCount() {
         count = 0;
     }
+
     @Override
     public String save(CartDetailDTO cartDetailDTO, String customerName) {
         Product product = productRepository.findById(cartDetailDTO.getProductDTO().getId()).get();
@@ -54,7 +58,7 @@ public class CartDetailService implements ICartDetailService {
         BeanUtils.copyProperties(cartDetailDTO, cartDetail);
         Cart cart = cartRepository.findWithCustomerNameAndIsDelete(customerName);
 
-        if (count == 0 && cart !=null && !cart.isDelete() && cart.getCustomerName().equals(customerName)) {
+        if (count == 0 && cart != null && !cart.isDelete() && cart.getCustomerName().equals(customerName)) {
             cartDetail.setCart(cart);
         } else if (count == 0) {
             Cart cart1 = new Cart();
@@ -80,7 +84,7 @@ public class CartDetailService implements ICartDetailService {
         }
 
         for (int i = cartDetailList.size() - 1; i >= 0; i--) {
-            if (count != 0 && cartDetailList.get(i).getProduct().equals(product)  && !cartDetailList.get(i).isDelete()) {
+            if (count != 0 && cartDetailList.get(i).getProduct().equals(product) && !cartDetailList.get(i).isDelete()) {
                 cartDetailList.get(i).setQuantity(cartDetailList.get(i).getQuantity() + cartDetailDTO.getQuantity());
                 cartDetailRepository.save(cartDetailList.get(i));
                 return "";
@@ -120,20 +124,21 @@ public class CartDetailService implements ICartDetailService {
         cartDetailRepository.save(cartDetail);
     }
 
+    private CartDetailDTO mapCartDetailToDTO(CartDetail cartDetail) {
+        CartDetailDTO cartDetailDTO = new CartDetailDTO();
+        cartDetailDTO.setCartDTO(new CartDTO());
+        BeanUtils.copyProperties(cartDetail.getCart(), cartDetailDTO.getCartDTO());
+        cartDetailDTO.setProductDTO(productService.findById(cartDetail.getProduct().getId()));
+        BeanUtils.copyProperties(cartDetail, cartDetailDTO);
+        return cartDetailDTO;
+    }
+
     @Override
     public List<CartDetailDTO> findAll(String customerName) {
-        List<CartDetail> cartDetailList = cartDetailRepository.findAllIsDeleteFalse(customerName);
-        List<CartDetailDTO> cartDetailDTOList = new ArrayList<>();
-        CartDetailDTO cartDetailDTO;
-        for (CartDetail cartDetail: cartDetailList) {
-            cartDetailDTO = new CartDetailDTO();
-            cartDetailDTO.setCartDTO(new CartDTO());
-            BeanUtils.copyProperties(cartDetail.getCart(), cartDetailDTO.getCartDTO());
-            cartDetailDTO.setProductDTO(productService.findById(cartDetail.getProduct().getId()));
-            BeanUtils.copyProperties(cartDetail, cartDetailDTO);
-            cartDetailDTOList.add(cartDetailDTO);
-        }
-        return cartDetailDTOList;
+        return cartDetailRepository.findAllIsDeleteFalse(customerName)
+                .stream()
+                .map(this::mapCartDetailToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -150,16 +155,9 @@ public class CartDetailService implements ICartDetailService {
     @Override
     public Page<CartDetailDTO> findTotalAll(String customerName, Pageable pageable) {
         Page<CartDetail> cartDetailPage = cartDetailRepository.findTotalAll(customerName, pageable);
-        List<CartDetailDTO> cartDetailDTOList = new ArrayList<>();
-        CartDetailDTO cartDetailDTO;
-        for (CartDetail cartDetail: cartDetailPage) {
-            cartDetailDTO = new CartDetailDTO();
-            cartDetailDTO.setCartDTO(new CartDTO());
-            BeanUtils.copyProperties(cartDetail.getCart(), cartDetailDTO.getCartDTO());
-            cartDetailDTO.setProductDTO(productService.findById(cartDetail.getProduct().getId()));
-            BeanUtils.copyProperties(cartDetail, cartDetailDTO);
-            cartDetailDTOList.add(cartDetailDTO);
-        }
+        List<CartDetailDTO> cartDetailDTOList = cartDetailPage.stream()
+                .map(this::mapCartDetailToDTO)
+                .collect(Collectors.toList());
         return new PageImpl<>(cartDetailDTOList, pageable, cartDetailPage.getTotalElements());
     }
 }
