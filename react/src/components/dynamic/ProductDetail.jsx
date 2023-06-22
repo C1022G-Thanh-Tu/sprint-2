@@ -11,7 +11,6 @@ function ProductDetail() {
   const [product, setProduct] = useState();
   const [products, setProducts] = useState([]);
   const [quantity, setQuantity] = useState(0);
-  const [isAdd, setIsAdd] = useState(false);
 
   const param = useParams();
   const dispatch = useDispatch();
@@ -32,8 +31,6 @@ function ProductDetail() {
         name
       )
     );
-    const newIsAdd = { ...isAdd };
-    setIsAdd(newIsAdd);
   };
 
   useEffect(() => {
@@ -50,13 +47,11 @@ function ProductDetail() {
   }, []);
 
   useEffect(() => {
-    const getProduct = async () => {
+    (async () => {
       const productResponse = await productService.findById(param.id);
       setProduct(productResponse.data);
-    };
-
-    getProduct();
-  }, [param.id, isAdd]);
+    })()
+  }, [param.id]);
 
   return (
     <>
