@@ -38,7 +38,7 @@ function Product() {
   };
 
   useEffect(() => {
-    const getProducts = async () => {
+    (async () => {
       try {
         const productsResponse = await productService.findByName(productFilter);
         if (isAppend) {
@@ -52,13 +52,12 @@ function Product() {
         document.getElementById("load-more").style.display = "block";
       } catch (error) {
         console.warn(error);
-        setProducts(error.response.data.content);
+        setProducts(error.response?.data.content);
         document.getElementById("list-empty").innerHTML =
           "Không tìm thấy kết quả";
         document.getElementById("load-more").style.display = "none";
       }
-    };
-    getProducts();
+    })();
   }, [productFilter]);
 
   useEffect(() => {
