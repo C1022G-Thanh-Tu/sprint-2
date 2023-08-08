@@ -308,6 +308,15 @@ function UserProfileEdit() {
                                 Lưu thông tin
                               </button>
                             </td>
+                            <td>
+                              <button
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                style={{marginTop: '42px'}}
+                              >
+                                Hủy
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>

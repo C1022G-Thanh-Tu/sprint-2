@@ -13,7 +13,7 @@ const cartDetailReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_CARTS_ACTION:
       return action.payload;
-
+      
     case ADD_ACTION:
       return action.payload;
 
