@@ -10,9 +10,9 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "terraform"
-    directory: "/"
+    directory: "/terraform"
     schedule:
-      interval: "daily"
+      interval: "weekly"
       time: "09:00"
       timezone: "America/New_York"
     open-pull-requests-limit: 10 
