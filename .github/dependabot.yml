@@ -9,3 +9,12 @@ updates:
     directory: "/api"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "terraform"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10 
+    allow:
+      - dependency-type: "all"
